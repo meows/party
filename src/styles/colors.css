@@ -1,0 +1,9 @@
+:root {
+   --red: rgb(227, 102, 118);
+   --red_dark: rgb(200, 46, 100);
+   --gray: rgb(175, 175, 175);
+   --gray_light: rgb(247, 247, 247);
+   --black: rgb(34, 34, 34);
+   --blue: rgb(42, 100, 246);
+   --orange: rgb(234, 110, 63);
+}
