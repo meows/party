@@ -23,7 +23,7 @@ const users = [
 // Execute Query
 
 async function main() {
-   db.users.createMany({ data: users })
+   db.users.createMany({ data: users, })
 }
 
 main()
