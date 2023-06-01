@@ -49,8 +49,8 @@
 - Prefer squash commits unless your commits are very clean and atomic.
 - A branch should be free of conflicts from `main` before merging.
 
-# VS code extensions
+# Recommended VS Code extensions
 
-- Prisma. It should have around 869k downloads. Use this to tell you what the DB is expecting and get DB API.
-- Tailwind. It should have around 3.2M downloads.
-- Prettier. It should have around 32.7M downloads. Use this to format document. Open command search in VScode(macOS shortcut is command + p) then search ">Format Document"
+- [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma). Use this to tell you what the DB is expecting and to get the DB API.
+- [Tailwind](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode). Use this to format code. Open command search in VSCode (macOS shortcut is command + p) and search ">Format Document".
