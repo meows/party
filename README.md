@@ -1,9 +1,8 @@
 # Requirements
 
-- PostgreSQL 15
-- Create an `env.json` file in project root and populate with the properties:
-   - `db_user`
-   - `db_name`
+- [PostgreSQL 15](https://postgresapp.com/downloads.html)
+   - Click "initialize" in postgres app to start db, double click the "postgres" one.
+- Download the ".env" file from the discord server and save it as ".env" in top level directory aka Party/
 
 # Installation
 
@@ -20,27 +19,38 @@
    ```
 
 3. Setup database schema & generate client.
-
    ```
    npx prisma db push
+   ```
+
+   Run the DB seed script `~/prisma/seed.ts` for initial data.
+   ```
    npx prisma db seed
    ```
 
-4. Start dev server.
+# Running DB and App
+
+1. Start dev server in another terminal window then nagivate in a new browser tab to `localhost:3000`.
 
    ```
    npm run dev
    ```
 
-## Extras
+2. Launch a db explorer. This command also confirms that prisma is working. This command should open a brower window at `localhost:5555`.
+   ```
+   npx prisma studio
+   ```
 
-Launch a db explorer.
-```
-npx prisma studio
-```
+> Note: If you update the DB schema then you must re-run `npx prisma generate` to recreate the client with the right typings.
 
 # Git Workflow
 
 - Everyone works on their own branch and does a pull request to merge to `main`.
 - Prefer squash commits unless your commits are very clean and atomic.
 - A branch should be free of conflicts from `main` before merging.
+
+# VS code extensions
+
+- Prisma. It should have around 869k downloads. Use this to tell you what the DB is expecting and get DB API.
+- Tailwind. It should have around 3.2M downloads.
+- Prettier. It should have around 32.7M downloads. Use this to format document. Open command search in VScode(macOS shortcut is command + p) then search ">Format Document"
