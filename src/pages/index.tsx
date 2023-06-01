@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import Button from "~/components/Button";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -77,6 +78,7 @@ const AuthShowcase: React.FC = () => {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
+      <Button />
     </div>
   );
 };
