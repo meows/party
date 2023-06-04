@@ -3,6 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import Button from "~/components/Button";
+import Input from "~/components/Input";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -78,6 +79,10 @@ const AuthShowcase: React.FC = () => {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
+      <Input type="text" id="id1" ghostText="This is our text field!" 
+      cssString="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none" />
+      <Input type="textarea" id="id2" ghostText="This is our text area!" 
+      cssString="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none" />
       <Button />
     </div>
   );
