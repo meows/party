@@ -12,7 +12,7 @@ type MenuProps = PropsWithChildren<{
 
 export function TopMenu({ children, ...props }: MenuProps) {
    return (
-      <menu className="">
+      <menu>
          <div {...props}>{children}</div>
       </menu>
    )
