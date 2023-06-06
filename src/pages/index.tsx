@@ -19,7 +19,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col">
         <Menu />
-        <p className="text-2xl px-5">
+        <p className="text-2xl px-5 py-5">
           {hello.data ? hello.data.greeting : "Loading tRPC query..."}
         </p>
       </main>
