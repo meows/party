@@ -1,5 +1,5 @@
 type InputProps = {
-  type: string;
+  type: "textarea" | "text"
 } & React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>
 
 export default function Input({ type, ...props }: InputProps) {
