@@ -1,41 +1,9 @@
-export default function Input({
-  type,
-  id,
-  name,
-  ghostText,
-  cssString,
-}: {
+type InputProps = {
   type: string;
-  id: string;
-  name?: string;
-  ghostText?: string;
-  cssString?: string;
-}) {
-  var inputField;
+} & React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>
 
-  switch (type) {
-    case "textarea":
-      inputField = (
-        <textarea
-          id={id}
-          name={name}
-          placeholder={ghostText}
-          className={cssString}
-        ></textarea>
-      );
-      break;
-    default:
-      inputField = (
-        <input
-          type="text"
-          id={id}
-          name={name}
-          placeholder={ghostText}
-          className={cssString}
-        />
-      );
-      break;
-  }
-
-  return <>{inputField}</>;
+export default function Input({ type, ...props }: InputProps) {
+  return type === "textarea"
+    ? <textarea {...props} />
+    : <input type="text" {...props} />
 }
