@@ -23,6 +23,7 @@ const Home: NextPage = () => {
         <p className="text-2xl px-5 py-5 text-white">
           {hello.data ? hello.data.greeting : "Loading tRPC query..."}
         </p>
+        <Input type="textarea" />
       </main>
     </>
   );
