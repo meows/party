@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 :root {
+   --white: rgb(247, 249, 252);
    --red: rgb(227, 102, 118);
    --red_dark: rgb(200, 46, 100);
    --gray: rgb(175, 175, 175);
    --gray_light: rgb(247, 247, 247);
+   --green: rgb(88, 187, 96);
    --black: rgb(34, 34, 34);
    --blue: rgb(42, 100, 246);
    --orange: rgb(234, 110, 63);
@@ -27,12 +29,16 @@
    border-right: 1px solid rgb(215, 214, 214);
    /* style */
    font-family: 'Helvetica';
-   font-weight: 400;
+   font-weight: 500;
    font-size: 13px;
    background-color: rgb(240, 240, 240);
    /* behavior */
    cursor: pointer;
    user-select: none;
+}
+
+#TopMenu li:first-child {
+   font-weight: bold;
 }
 
 #TopMenu li:hover {
