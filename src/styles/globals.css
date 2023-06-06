@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#TopMenu {
+   display: flex;
+   justify-content: space-between;
+}
+
+#TopMenu li {
+   /* position */
+   text-align: center;
+   /* dimension */
+   padding: 10px 15px;
+   flex: 1 1 initial;
+   /* style */
+   font-weight: 500;
+   font-size: 1.2rem;
+}
+
+#TopMenu li:hover {
+   background-color: gray;
+}

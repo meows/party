@@ -10,6 +10,17 @@ type MenuProps = PropsWithChildren<{
 
 }>
 
+export default function Menu() {
+   return (
+      <menu id="TopMenu">
+         <li>Events</li>
+         <li>Search</li>
+         <li>Message</li>
+         <li>Accounts</li>
+      </menu>
+   )
+}
+
 export function TopMenu({ children, ...props }: MenuProps) {
    return (
       <menu>
