@@ -7,16 +7,17 @@ type ItemProps = PropsWithChildren<{
 
 type MenuProps = PropsWithChildren<{
    className?: string
-
+   active: MenuChoice
 }>
 
-export default function Menu() {
+export default function Menu({ active, children, ...props }: MenuProps) {
    return (
-      <menu id="TopMenu">
-         <li>Events</li>
-         <li>Search</li>
-         <li>Message</li>
-         <li>Accounts</li>
+      <menu id="TopMenu" {...props}>
+         <li id="logo">XYZ</li>
+         <li title="Events" className={active === "events" ? "active" : ""}>Events</li>
+         <li title="Search" className={active === "search" ? "active" : ""}>Search</li>
+         <li title="Message" className={active === "message" ? "active" : ""}>Message</li>
+         <li title="Accounts" className={active === "accounts" ? "active" : ""}>Accounts</li>
       </menu>
    )
 }

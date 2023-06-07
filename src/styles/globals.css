@@ -17,36 +17,60 @@
 #TopMenu {
    display: flex;
    justify-content: space-between;
-   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.3);
+   padding-top: 1em;
 }
 
-#TopMenu li {
+#TopMenu li:not(:first-child) {
    /* position */
    text-align: center;
    /* dimension */
    padding: 10px 15px;
    flex-grow: 1;
-   border-right: 1px solid rgb(215, 214, 214);
    /* style */
    font-family: 'Helvetica';
    font-weight: 500;
    font-size: 13px;
-   background-color: rgb(240, 240, 240);
+   color: white;
+   border-radius: 10px;
    /* behavior */
    cursor: pointer;
    user-select: none;
+   border: 1px solid transparent;
 }
 
 #TopMenu li:first-child {
    font-weight: bold;
+   color: white;
+   /* vertically center */
+   display: flex;
+   align-items: center;
+   margin-right: 10px;
 }
 
-#TopMenu li:hover {
-   background-color: rgb(228, 225, 225);
-   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+#TopMenu li:hover:not(:first-child) {
+   border: 1px solid var(--gray);
+   font-weight: bold;
 }
 
 /* flatten effect on click */
 #TopMenu li:active {
    box-shadow: none;
+}
+
+#TopMenu li:after {
+   display: block;
+   content: attr(title);
+   font-weight: bold;
+   height: 1px;
+   color: transparent;
+   overflow: hidden;
+   visibility: hidden; 
+ 
+   @media speech {
+     display: none;
+   }
+}
+
+#TopMenu .active {
+   font-weight: bold;
 }
