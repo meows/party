@@ -80,13 +80,13 @@ const AuthShowcase: React.FC = () => {
         {sessionData ? "Sign out" : "Sign in"}
       </button>
       <Input
-        cssString="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none"
+        className="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none"
         id="id1"
         placeholder="This is our text field!"
         type="text"
       />
       <Input
-        cssString="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none"
+        className="flex cursor-pointer items-center justify-between rounded bg-brand-gray_light px-3 py-1.5 text-brand-red hover:bg-brand-gray focus:outline-none"
         id="id2"
         placeholder="This is our text area!"
         type="textarea"
