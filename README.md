@@ -29,7 +29,7 @@
 
 # Running DB and App
 
-1. Start dev server in another terminal window then nagivate in a new browser 
+1. Start the dev server in another terminal window, then navigate in a new browser
    tab to `localhost:3000`.
 
    ```
