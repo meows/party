@@ -1,3 +1,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+   --white: rgb(247, 249, 252);
+   --red: rgb(227, 102, 118);
+   --red_dark: rgb(200, 46, 100);
+   --gray: rgb(175, 175, 175);
+   --gray_light: rgb(247, 247, 247);
+   --green: rgb(88, 187, 96);
+   --black: rgb(34, 34, 34);
+   --blue: rgb(42, 100, 246);
+   --orange: rgb(234, 110, 63);
+}
+
+#TopMenu {
+   display: flex;
+   justify-content: space-between;
+   padding-top: 1em;
+}
+
+#TopMenu li:not(:first-child) {
+   /* position */
+   text-align: center;
+   /* dimension */
+   padding: 10px 15px;
+   flex-grow: 1;
+   /* style */
+   /* font-family: 'Helvetica'; */
+   font-weight: 500;
+   font-size: 13px;
+   color: white;
+   border-radius: 10px;
+   /* behavior */
+   cursor: pointer;
+   user-select: none;
+   border: 1px solid transparent;
+}
+
+#TopMenu li:first-child {
+   font-weight: bold;
+   color: white;
+   /* vertically center */
+   display: flex;
+   align-items: center;
+   margin-right: 10px;
+}
+
+#TopMenu li:hover:not(:first-child) {
+   border: 1px solid var(--gray);
+   font-weight: bold;
+}
+
+/* flatten effect on click */
+#TopMenu li:active {
+   box-shadow: none;
+}
+
+#TopMenu li:after {
+   display: block;
+   content: attr(title);
+   font-weight: bold;
+   height: 1px;
+   color: transparent;
+   overflow: hidden;
+   visibility: hidden; 
+ 
+   @media speech {
+     display: none;
+   }
+}
+
+#TopMenu .active {
+   font-weight: bold;
+}
