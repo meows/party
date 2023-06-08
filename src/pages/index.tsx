@@ -24,6 +24,7 @@ const Home: NextPage = () => {
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
           <Button>Click me</Button>
+          <Input type="textarea" />
         </main>
       </div>
     </>
