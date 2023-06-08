@@ -1,8 +1,7 @@
 # Requirements
 
 - [PostgreSQL 15](https://postgresapp.com/downloads.html)
-   - Click "initialize" in postgres app to start db, double click the "postgres" one.
-- Download the ".env" file from the discord server and save it as ".env" in top level directory aka Party/
+- Download the `.env` file from the discord server and save to project root.
 
 # Installation
 
@@ -30,15 +29,19 @@
 
 # Running DB and App
 
-1. Start dev server in another terminal window then nagivate in a new browser tab to `localhost:3000`.
+1. Start the dev server in another terminal window, then navigate in a new browser
+   tab to `localhost:3000`.
 
    ```
    npm run dev
    ```
 
-   > Next.js will launch a dev server accessible over your local network.
+   > Next.js will launch a dev server accessible over your local network. If
+   > your hostname is `meow` then you can access the dev server from another
+   > device at `meow.local:3000`.
 
-2. Launch a db explorer. This command also confirms that prisma is working. This command should open a brower window at `localhost:5555`.
+2. Launch a db explorer. This command also confirms that prisma is working. This 
+   command should open a brower window at `localhost:5555`.
    ```
    npx prisma studio
    ```
@@ -51,6 +54,7 @@
 
 # Recommended VS Code extensions
 
-- [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma). Use this to tell you what the DB is expecting and to get the DB API.
+- [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)
 - [Tailwind](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
-- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode). Use this to format code. Open command search in VSCode (macOS shortcut is command + p) and search ">Format Document".
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- https://github.com/tailwindlabs/prettier-plugin-tailwindcss (Prettier plugin)
