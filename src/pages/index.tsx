@@ -18,13 +18,14 @@ const Home: NextPage = () => {
       </Head>
     
       <div className="bg-gradient-to-b from-gray-900 to-gray-700">
-        <main className="min-h-screen max-w-[600px] m-auto px-5">
+        <main className="flex flex-col min-h-screen max-w-[600px] m-auto px-5">
           <Menu active="accounts" />
           <p className="text-2xl px-5 py-5 text-white">
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
           <Button>Click me</Button>
           <Input type="textarea" />
+          <Input type="text" />
         </main>
       </div>
     </>
