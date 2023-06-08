@@ -91,7 +91,7 @@ const AuthShowcase: React.FC = () => {
         placeholder="This is our text area!"
         type="textarea"
       />
-      <Button />
+      <Button>Submit</Button>
     </div>
   );
 };
