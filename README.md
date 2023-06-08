@@ -36,12 +36,12 @@
    npm run dev
    ```
 
+   > Next.js will launch a dev server accessible over your local network.
+
 2. Launch a db explorer. This command also confirms that prisma is working. This command should open a brower window at `localhost:5555`.
    ```
    npx prisma studio
    ```
-
-> Note: If you update the DB schema then you must re-run `npx prisma generate` to recreate the client with the right typings.
 
 # Git Workflow
 
