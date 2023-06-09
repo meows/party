@@ -36,9 +36,10 @@
    npm run dev
    ```
 
-   > Next.js will launch a dev server accessible over your local network. If
-   > your hostname is `meow` then you can access the dev server from another
-   > device at `meow.local:3000`.
+   > Next.js will launch a dev server accessible over your local network. You
+   > can access the dev server from another device on the same local network at 
+   > `hostname.local:3000`. Get your hostname by typing `hostname` into the 
+   > terminal.
 
 2. Launch a db explorer. This command also confirms that prisma is working. This 
    command should open a brower window at `localhost:5555`.
