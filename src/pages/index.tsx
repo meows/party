@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
 import Select, { createFilter, StylesConfig } from "react-select";
 import { defaultTheme } from "react-select";
+import DropButton, { DropItem } from "~/components/DropButton";
 
 export interface StateOption {
   readonly value: string;
@@ -219,6 +220,11 @@ const Home: NextPage = () => {
           <p className="px-5 py-5 text-2xl text-white">
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
+          <DropButton default={"date" as SortEvents} name="Sort By: ">
+            <DropItem>Meow</DropItem>
+            <DropItem>Bark</DropItem>
+            <DropItem>Moo</DropItem>
+          </DropButton>
           <Button>Click me</Button>
           <Input type="textarea" />
           <Input type="text" />
