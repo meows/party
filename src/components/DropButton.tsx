@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { atom, useAtom } from 'jotai'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -15,10 +16,12 @@ type ButtonProps<T> = React.PropsWithChildren<{
 
 type DropItem = React.PropsWithChildren<{
   onClick?: React.MouseEventHandler<HTMLButtonElement>
-  index: number
 }>
 
-export function DropItem<T>({ children, onClick, index, ...props }: DropItem) {
+const selectedAtom = atom("")
+
+export function DropItem<T>({ children, onClick, ...props }: DropItem) {
+  const [, setSelected] = useAtom(selectedAtom)
   return (
     <Menu.Item {...props}>
       {({ active }) => (
@@ -39,7 +42,8 @@ export function DropItem<T>({ children, onClick, index, ...props }: DropItem) {
 }
 
 export default function DropButton<T>({ children, name, ...props }: ButtonProps<T>) {
-  const [selected, setSelected] = useState("")
+  console.log(children)
+  const [selected] = useAtom(selectedAtom)
   return (
     <Menu as="div" className="relative inline-block text-left min-w-[150px] max-w-[150px]">
       <div>
