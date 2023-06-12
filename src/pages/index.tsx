@@ -1,14 +1,12 @@
 import { type NextPage } from "next";
-import React, { ReactNode, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
+import React, { ReactNode, useState } from "react";
+import Select, { StylesConfig, createFilter, defaultTheme } from "react-select";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
-import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
-import Select, { createFilter, StylesConfig } from "react-select";
-import { defaultTheme } from "react-select";
+import { api } from "~/utils/api";
 
 export interface StateOption {
   readonly value: string;
@@ -159,7 +157,7 @@ const Home: NextPage = () => {
                   onClick={() => setIsOpen((prev) => !prev)}
                   className={`active=${isOpen}`}
                 >
-                  {value ? `State: ${value.label}` : "Select a TimeFram"}
+                  {value ? `State: ${value.label}` : "Select a TimeFrame"}
                 </button>
               }
             >
