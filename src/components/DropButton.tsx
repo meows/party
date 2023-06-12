@@ -65,7 +65,11 @@ export default function DropButton<T>({ children, name, ...props }: ButtonProps<
         <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             { 
-              children
+              React.Children.map(children, (child) => {
+                React.isValidElement(child)
+                  ? React.cloneElement(child, { selected })
+                  : child
+              })
             }
           </div>
         </Menu.Items>
