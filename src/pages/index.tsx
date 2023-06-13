@@ -2,14 +2,16 @@ import { type NextPage } from "next";
 import React, { ReactNode, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
 import Select, { createFilter, StylesConfig } from "react-select";
 import { defaultTheme } from "react-select";
-import DropButton, { DropItem } from "~/components/DropButton";
+import DropButton, { DropItem } from "~/components/Dropdown";
+
+// —————————————————————————————————————————————————————————————————————————————
+// Environment
 
 export interface StateOption {
   readonly value: string;
@@ -23,7 +25,6 @@ export interface ColourOption {
   readonly isFixed?: boolean;
   readonly isDisabled?: boolean;
 }
-
 
 export const stateOptions: readonly StateOption[] = [
   { value: "AL", label: "Alabama" },
@@ -86,6 +87,7 @@ export const stateOptions: readonly StateOption[] = [
   { value: "WI", label: "Wisconsin" },
   { value: "WY", label: "Wyoming" },
 ];
+
 export const colourOptions: readonly ColourOption[] = [
   { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
   { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
@@ -99,10 +101,8 @@ export const colourOptions: readonly ColourOption[] = [
   { value: "silver", label: "Silver", color: "#666666" },
 ];
 
-const Checkbox = (props: JSX.IntrinsicElements["input"]) => (
-  <input type="checkbox" {...props} />
-);
-
+// —————————————————————————————————————————————————————————————————————————————
+// Component
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -160,7 +160,7 @@ const Home: NextPage = () => {
                   onClick={() => setIsOpen((prev) => !prev)}
                   className={`active=${isOpen}`}
                 >
-                  {value ? `State: ${value.label}` : "Select a TimeFram"}
+                  {value ? `State: ${value.label}` : "Filter by date"}
                 </button>
               }
             >
@@ -286,23 +286,19 @@ const Menu = (props: JSX.IntrinsicElements["div"]) => {
 const Blanket = (props: JSX.IntrinsicElements["div"]) => (
   <div className="z-1 fixed inset-0" {...props} />
 );
-const Dropdown = ({
-  children,
-  isOpen,
-  target,
-  onClose,
-}: {
+const Dropdown = ({ children, isOpen, target, onClose, }: {
   children?: ReactNode;
   readonly isOpen: boolean;
   readonly target: ReactNode;
   readonly onClose: () => void;
 }) => (
-  <div className="relative bg-brand-gray_light rounded p-3">
+  <div className="relative rounded bg-brand-gray_light p-3">
     {target}
     {isOpen ? <Menu>{children}</Menu> : null}
     {isOpen ? <Blanket onClick={onClose} /> : null}
   </div>
 );
+
 const Svg = (p: JSX.IntrinsicElements["svg"]) => (
   <svg
     width="24"
@@ -313,6 +309,7 @@ const Svg = (p: JSX.IntrinsicElements["svg"]) => (
     {...p}
   />
 );
+
 const DropdownIndicator = () => (
   <div className="text-neutral20 h-24 w-32">
     <Svg>
@@ -324,6 +321,7 @@ const DropdownIndicator = () => (
     </Svg>
   </div>
 );
+
 const ChevronDown = () => (
   <Svg style={{ marginRight: -6 }}>
     <path
