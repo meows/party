@@ -10,14 +10,18 @@ type MenuProps = PropsWithChildren<{
    active: MenuChoice
 }>
 
+function classNames(...classes: string[]) {
+   return classes.filter(Boolean).join(" ");
+ }
+
 export default function Menu({ active, children, ...props }: MenuProps) {
    return (
       <menu id="TopMenu" {...props}>
          <li id="logo">XYZ</li>
-         <li title="Events" className={active === "events" ? "active" : ""}>Events</li>
-         <li title="Search" className={active === "search" ? "active" : ""}>Search</li>
-         <li title="Message" className={active === "message" ? "active" : ""}>Message</li>
-         <li title="Accounts" className={active === "accounts" ? "active" : ""}>Accounts</li>
+         <li title="Events" className={classNames("text-xs", active === "events" ? "active" : "")}>Events</li>
+         <li title="Search" className={classNames("text-xs", active === "search" ? "active" : "")}>Search</li>
+         <li title="Message" className={classNames("text-xs", active === "message" ? "active" : "")}>Message</li>
+         <li title="Accounts" className={classNames("text-xs", active === "accounts" ? "active" : "")}>Accounts</li>
       </menu>
    )
 }
