@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
 import Select, { createFilter } from "react-select";
 import { DropDownButton, DropDownItem } from "~/components/DropDownButton";
+import Feed from "~/components/Feed";
 
 // —————————————————————————————————————————————————————————————————————————————
 // Environment
@@ -150,7 +151,7 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="flex min-w-[300px] flex-row items-center justify-center gap-2 p-5">
-          <DropDownButton defaultValue={"Any day" as SortDateRange} name="Date Range:">
+          <DropDownButton defaultValue={"Any day" as SortDateRange} name="Time Frame:">
             <DropDownItem>Any day</DropDownItem>
             <DropDownItem>Today</DropDownItem>
             <DropDownItem>Tomorrow</DropDownItem>
@@ -170,6 +171,7 @@ const Home: NextPage = () => {
           <Button>Click me</Button>
           <Input type="textarea" />
           <Input type="text" />
+          <Feed />
         </div>
       </main>
     </>
