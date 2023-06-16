@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
 import Select, { createFilter } from "react-select";
 import { DropDownButton, DropDownItem } from "~/components/DropDownButton";
+import Feed from "~/components/Feed";
 
 // —————————————————————————————————————————————————————————————————————————————
 // Environment
@@ -170,6 +171,7 @@ const Home: NextPage = () => {
           <Button>Click me</Button>
           <Input type="textarea" />
           <Input type="text" />
+          <Feed />
         </div>
       </main>
     </>
