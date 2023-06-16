@@ -151,7 +151,7 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="flex min-w-[300px] flex-row items-center justify-center gap-2 p-5">
-          <DropDownButton defaultValue={"Any day" as SortDateRange} name="Time Frame:">
+          <DropDownButton defaultValue={"Any day" as SortDateRange} name="Date Range:">
             <DropDownItem>Any day</DropDownItem>
             <DropDownItem>Today</DropDownItem>
             <DropDownItem>Tomorrow</DropDownItem>
