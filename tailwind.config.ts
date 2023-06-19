@@ -10,7 +10,7 @@ export default {
         "brand-gray": "rgb(175, 175, 175)",
         "brand-gray_light": "rgb(247, 247, 247)",
         "brand-black": "rgb(34, 34, 34)",
-        "brand-blue": "rgb(42, 100, 246)",
+        "brand-blue": "rgb(55, 110, 200)",
         "brand-orange": "rgb(234, 110, 63)",
       }
     },

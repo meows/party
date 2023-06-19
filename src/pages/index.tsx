@@ -1,14 +1,17 @@
 import { type NextPage } from "next";
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { api } from "~/utils/api";
 import TopMenu from "~/components/TopMenu";
-import Select, { createFilter, StylesConfig } from "react-select";
-import { defaultTheme } from "react-select";
+import Select, { createFilter } from "react-select";
+import { DropDownButton, DropDownItem } from "~/components/DropDownButton";
+import Feed from "~/components/Feed";
+
+// —————————————————————————————————————————————————————————————————————————————
+// Environment
 
 export interface StateOption {
   readonly value: string;
@@ -22,7 +25,6 @@ export interface ColourOption {
   readonly isFixed?: boolean;
   readonly isDisabled?: boolean;
 }
-
 
 export const stateOptions: readonly StateOption[] = [
   { value: "AL", label: "Alabama" },
@@ -85,6 +87,7 @@ export const stateOptions: readonly StateOption[] = [
   { value: "WI", label: "Wisconsin" },
   { value: "WY", label: "Wyoming" },
 ];
+
 export const colourOptions: readonly ColourOption[] = [
   { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
   { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
@@ -98,19 +101,15 @@ export const colourOptions: readonly ColourOption[] = [
   { value: "silver", label: "Silver", color: "#666666" },
 ];
 
-const Checkbox = (props: JSX.IntrinsicElements["input"]) => (
-  <input type="checkbox" {...props} />
-);
-
+// —————————————————————————————————————————————————————————————————————————————
+// Component
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const [ignoreCase, setIgnoreCase] = useState(false);
-  const [ignoreAccents, setIgnoreAccents] = useState(false);
-  const [trim, setTrim] = useState(false);
-  const [matchFromStart, setMatchFromStart] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState<StateOption | null>();
+  const [ignoreCase] = useState(true);
+  const [ignoreAccents] = useState(true);
+  const [trim] = useState(false);
+  const [matchFromStart] = useState(false);
 
   const filterConfig = {
     ignoreCase,
@@ -127,101 +126,52 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="overflow-y-auto bg-gradient-to-b from-gray-900 to-gray-700">
-        <div className="m-auto flex min-h-screen max-w-[600px] flex-col bg-gradient-to-b from-gray-900 to-gray-700 px-5">
+        <div className="m-auto flex min-h-screen min-w-[375px] max-w-[600px] flex-col bg-gradient-to-b from-gray-900 to-gray-700 px-5">
           <TopMenu active="accounts" />
           <div className="flex min-w-[375px] flex-row items-center justify-center gap-2 p-5">
             <Select
-              className="w-1/2 min-w-[150px]"
-              defaultValue={colourOptions[0]}
-              isClearable
-              isSearchable
-              name="color"
+              className="w-1/2 min-w-[150px] whitespace-nowrap text-xs"
+              // defaultValue={colourOptions[0]}
+              placeholder={"Search events..."}
+              isClearable={false}
+              isSearchable={true}
+              name="events"
               options={colourOptions}
-              filterOption={createFilter(filterConfig)}
+              // filterOption={createFilter(filterConfig)}
             />
             <Select
-              className="w-1/2 min-w-[150px]"
-              defaultValue={colourOptions[0]}
-              isClearable
+              className="w-1/2 min-w-[150px] whitespace-nowrap text-xs"
+              // defaultValue={stateOptions[0]}
+              placeholder={"Search City"}
+              isClearable={false}
               isSearchable
-              name="color"
-              options={colourOptions}
+              name="city"
+              options={stateOptions}
               filterOption={createFilter(filterConfig)}
             />
           </div>
-          <div className="flex min-w-[375px] flex-row items-center justify-center gap-2 p-5">
-            <Dropdown
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-              target={
-                <button
-                  // iconAfter={<ChevronDown />}
-                  onClick={() => setIsOpen((prev) => !prev)}
-                  className={`active=${isOpen}`}
-                >
-                  {value ? `State: ${value.label}` : "Select a TimeFram"}
-                </button>
-              }
-            >
-              <Select
-                autoFocus
-                backspaceRemovesValue={false}
-                components={{ DropdownIndicator, IndicatorSeparator: null }}
-                controlShouldRenderValue={false}
-                hideSelectedOptions={false}
-                isClearable={false}
-                menuIsOpen
-                onChange={(newValue) => {
-                  setValue(newValue);
-                  setIsOpen(false);
-                }}
-                options={stateOptions}
-                placeholder="Search..."
-                styles={selectStyles}
-                tabSelectsValue={false}
-                value={value}
-              />
-            </Dropdown>
-            <Dropdown
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-              target={
-                <button
-                  // iconAfter={<ChevronDown />}
-                  onClick={() => setIsOpen((prev) => !prev)}
-                  className={`active=${isOpen}`}
-                >
-                  {value ? `City: ${value.label}` : "Select a City"}
-                </button>
-              }
-            >
-              <Select
-                autoFocus
-                backspaceRemovesValue={false}
-                components={{ DropdownIndicator, IndicatorSeparator: null }}
-                controlShouldRenderValue={false}
-                hideSelectedOptions={false}
-                isClearable={false}
-                menuIsOpen
-                onChange={(newValue) => {
-                  setValue(newValue);
-                  setIsOpen(false);
-                }}
-                options={stateOptions}
-                placeholder="Search..."
-                styles={selectStyles}
-                tabSelectsValue={false}
-                value={value}
-              />
-            </Dropdown>
+          <div className="flex min-w-[300px] flex-row items-center justify-center gap-2 p-5">
+          <DropDownButton defaultValue={"Any day" as SortDateRange} name="Date Range:">
+            <DropDownItem>Any day</DropDownItem>
+            <DropDownItem>Today</DropDownItem>
+            <DropDownItem>Tomorrow</DropDownItem>
+            <DropDownItem>Upcoming Week</DropDownItem>
+            <DropDownItem>Upcoming Weekend</DropDownItem>
+            <DropDownItem>Custom</DropDownItem>
+          </DropDownButton>
+          <DropDownButton defaultValue={"date" as SortEvents} name="Sort By:">
+            <DropDownItem>Date</DropDownItem>
+            <DropDownItem>Distance</DropDownItem>
+            <DropDownItem>Popularity</DropDownItem>
+          </DropDownButton>
           </div>
-
           <p className="px-5 py-5 text-2xl text-white">
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
           <Button>Click me</Button>
           <Input type="textarea" />
           <Input type="text" />
+          <Feed />
         </div>
       </main>
     </>
@@ -254,76 +204,5 @@ const AuthShowcase: React.FC = () => {
   );
 };
 
-const { colors } = defaultTheme;
 
-const selectStyles: StylesConfig<StateOption, false> = {
-  control: (provided) => ({
-    ...provided,
-    minWidth: 240,
-    // minWidth: 100,
-    margin: 8,
-  }),
-  menu: () => ({ boxShadow: "inset 0 1px 0 rgba(0, 0, 0, 0.1)" }),
-};
 
-// styled components
-
-const Menu = (props: JSX.IntrinsicElements["div"]) => {
-  const shadow = "hsla(218, 50%, 10%, 0.1)";
-  return (
-    <div
-      className="rounded-4 z-2 absolute mt-8 bg-white shadow-md"
-      {...props}
-    />
-  );
-};
-const Blanket = (props: JSX.IntrinsicElements["div"]) => (
-  <div className="z-1 fixed inset-0" {...props} />
-);
-const Dropdown = ({
-  children,
-  isOpen,
-  target,
-  onClose,
-}: {
-  children?: ReactNode;
-  readonly isOpen: boolean;
-  readonly target: ReactNode;
-  readonly onClose: () => void;
-}) => (
-  <div className="relative bg-brand-gray_light rounded p-3">
-    {target}
-    {isOpen ? <Menu>{children}</Menu> : null}
-    {isOpen ? <Blanket onClick={onClose} /> : null}
-  </div>
-);
-const Svg = (p: JSX.IntrinsicElements["svg"]) => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    focusable="false"
-    role="presentation"
-    {...p}
-  />
-);
-const DropdownIndicator = () => (
-  <div className="text-neutral20 h-24 w-32">
-    <Svg>
-      <path
-        d="M16.436 15.085l3.94 4.01a1 1 0 0 1-1.425 1.402l-3.938-4.006a7.5 7.5 0 1 1 1.423-1.406zM10.5 16a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"
-        fill="currentColor"
-        fillRule="evenodd"
-      />
-    </Svg>
-  </div>
-);
-const ChevronDown = () => (
-  <Svg style={{ marginRight: -6 }}>
-    <path
-      d="M8.292 10.293a1.009 1.009 0 0 0 0 1.419l2.939 2.965c.218.215.5.322.779.322s.556-.107.769-.322l2.93-2.955a1.01 1.01 0 0 0 0-1.419.987.987 0 0 0-1.406 0l-2.298 2.317-2.307-2.327a.99.99 0 0 0-1.406 0z"
-      fill="currentColor"
-      fillRule="evenodd"
-    />
-  </Svg>
-);
