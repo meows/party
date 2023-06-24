@@ -26,12 +26,25 @@ model messages {
 model parties {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(255)
-  host        Int
+  hostname    String
   hostid      Int
   chatid      String     @db.VarChar(255)
-  bannerimage Bytes
+  bannerimage String // url
   chatrooms   chatrooms?
-  users       users      @relation(fields: [hostid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  start_time  DateTime
+
+  state            String
+  city             String
+  zip              String
+  street_number    String
+  street           String
+  unit             String?
+  longitude        Float
+  latitude         Float
+  plus_code_global String
+  rsvp_users       Int[]
+  users            users?  @relation(fields: [usersId], references: [id])
+  usersId          Int?
 }
 
 model sessions {
