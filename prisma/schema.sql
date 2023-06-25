@@ -21,8 +21,8 @@ CREATE TABLE Account (
     -- used as drop-down options for party creation; 0th is default.
     -- on creation, the `email` and `phone` will be duplicated into 
     -- `host_email` and `host_phone`; user can change later.
-    host_email Email[] UNIQUE,
-    host_phone Phone[] UNIQUE,
+    host_email VARCHAR(255)[] UNIQUE,
+    host_phone VARCHAR(255)[] UNIQUE,
 
     hash       VARCHAR(255)  NOT NULL,
     created    TIMESTAMP     DEFAULT NOW(),
@@ -57,7 +57,7 @@ CREATE TABLE Settings (
 
 CREATE TABLE Party (
     id              SERIAL,
-    party_name      Name,
+    party_name      VARCHAR(255),
     host_id         INT REFERENCES Account(id),
     chat_id         VARCHAR(255),
     host_email      Email,
