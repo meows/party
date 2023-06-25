@@ -47,10 +47,10 @@ CREATE TABLE Session (
 
 CREATE TABLE Settings (
    id        SERIAL,
-   user_id   INT,
+   guest   INT,
 
    PRIMARY KEY (id),
-   FOREIGN KEY (user_id) REFERENCES Account(id)
+   FOREIGN KEY (guest) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -84,11 +84,11 @@ CREATE TABLE Party (
 );
 
 CREATE TABLE Attendance (
-   user_id    INT,
-   party_id   INT,
-   seen       TIMESTAMP   DEFAULT NULL,
+   guest   INT,
+   party   INT,
+   seen    TIMESTAMP   DEFAULT NULL,
 
-   PRIMARY KEY (user_id, party_id),
-   FOREIGN KEY (party_id)            REFERENCES Party(id),
-   FOREIGN KEY (user_id)             REFERENCES Account(id)
+   PRIMARY KEY (guest, party),
+   FOREIGN KEY (party) REFERENCES Party(id),
+   FOREIGN KEY (guest) REFERENCES Account(id)
 );
