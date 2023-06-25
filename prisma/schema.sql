@@ -8,7 +8,7 @@ SET search_path TO party;
 -- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
-CREATE TYPE     RSVP       AS ENUM ('attending', 'cancelled', 'waitlist');
+CREATE TYPE     RSVP       AS ENUM ('attending', 'waitlist');
 CREATE DOMAIN   Email      VARCHAR(255);
 CREATE DOMAIN   Phone      VARCHAR(64);
 CREATE DOMAIN   Name       VARCHAR(64);
@@ -47,27 +47,34 @@ CREATE TABLE Settings (
 );
 
 CREATE TABLE Session (
-   user     INT            NOT NULL,
-   token    VARCHAR(255),
-   expiry   TIMESTAMP      NOT NULL,
+   account   INT            NOT NULL,
+   token     VARCHAR(255),
+   expiry    TIMESTAMP      NOT NULL,
 
    PRIMARY KEY (token),
-   FOREIGN KEY (user) REFERENCES Account(id)
+   FOREIGN KEY (account) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
 -- Party
 
 CREATE TABLE Party (
-   id             SERIAL,
-   party_name     VARCHAR(255)    NOT NULL,
-   host_id        INT             NOT NULL,
-   chat_id        VARCHAR(255),
-   host_email     Email,
-   host_phone     Phone,
-   time_start     TIMESTAMP       NOT NULL,
-   time_end       TIMESTAMP,
-   banner_image   Link,
+   id              SERIAL,
+   party_name      VARCHAR(255)   NOT NULL,
+   banner_image    Link,
+   host_id         INT            NOT NULL,
+   chat_id         VARCHAR(255),
+   host_email      Email,
+   host_phone      Phone,
+
+   time_start      TIMESTAMP      NOT NULL,
+   time_end        TIMESTAMP,
+   is_waitlist     BOOLEAN        DEFAULT FALSE NOT NULL,
+   party_size      INT            DEFAULT 10 NOT NULL,
+   price           INT            DEFAULT 0 NOT NULL,
+   -- private means unlisted & location is hidden until rsvp
+   is_private      BOOLEAN        DEFAULT FALSE NOT NULL,
+   is_deleted      BOOLEAN        DEFAULT FALSE NOT NULL,
 
    state           VARCHAR(255)   NOT NULL,
    city            VARCHAR(255)   NOT NULL,
@@ -86,10 +93,12 @@ CREATE TABLE Party (
 );
 
 CREATE TABLE Attendance (
-   guest   INT,
-   party   INT,
-   seen    TIMESTAMP   DEFAULT NULL,
-   rsvp    RSVP        DEFAULT 'attending' NOT NULL,
+   guest     INT,
+   party     INT,
+   seen      TIMESTAMP   DEFAULT NULL,  -- person was seen at the party(qr code)
+   rsvp      RSVP        DEFAULT 'attending' NOT NULL,
+   paid      REAL        DEFAULT 0 NOT NULL,
+   qr_code   TEXT,       -- svg for qr code
 
    PRIMARY KEY (guest, party),
    FOREIGN KEY (party) REFERENCES Party(id),
