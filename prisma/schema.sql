@@ -18,31 +18,30 @@ CREATE DOMAIN   Link       VARCHAR(255);
 -- Account
 
 CREATE TABLE Account (
-   id         SERIAL,
-   name       TEXT     NOT NULL,
-   email      Email    UNIQUE NOT NULL,
-   phone      Phone    UNIQUE,
-   host_id    TEXT     UNIQUE NOT NULL,
+   id           SERIAL,
+   name         TEXT        NOT NULL,
+   email        Email       UNIQUE NOT NULL,
+   phone        Phone       UNIQUE,
+   host_id      TEXT        UNIQUE NOT NULL,
    -- used as drop-down options for party creation; 0th is default.
    -- on creation, the `email` and `phone` will be duplicated into
    -- `host_email` and `host_phone`; user can change later.
-   host_email TEXT[]   UNIQUE,
-   host_phone TEXT[]   UNIQUE,
-   hash       TEXT        NOT NULL,
-   about      TEXT,
-   is_host    BOOLEAN     DEFAULT FALSE,
-
-   created    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   updated    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   seen       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   delete_by  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 days',
+   host_email   TEXT[]      UNIQUE,
+   host_phone   TEXT[]      UNIQUE,
+   hash         TEXT        NOT NULL,
+   about        TEXT,
+   is_host      BOOLEAN     DEFAULT FALSE,
+   created      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   updated      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   seen         TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   delete_by    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 days',
 
    PRIMARY KEY (id)
 );
 
 CREATE TABLE Session (
    token    VARCHAR(255),
-   expiry   TIMESTAMP       NOT NULL,
+   expiry   TIMESTAMP      NOT NULL,
 
    PRIMARY KEY (token)
 );
@@ -80,7 +79,6 @@ CREATE TABLE Party (
    plus_code       VARCHAR(255),
 
    widgets         JSONB,
-   guests          JSONB,
 
    PRIMARY KEY (id),
    FOREIGN KEY (host_id) REFERENCES Account(id)
