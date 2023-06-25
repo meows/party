@@ -46,7 +46,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE Settings (
-   id        SERIAL,
+   id      SERIAL,
    guest   INT,
 
    PRIMARY KEY (id),
