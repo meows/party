@@ -1,11 +1,9 @@
--- —————————————————————————————————————————————————————————————————————————————
 -- Reset
 
 DROP SCHEMA IF EXISTS party CASCADE;
 CREATE SCHEMA party;
 SET search_path TO party;
 
--- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
 CREATE TYPE     Property   AS ENUM ('residential', 'commercial');
@@ -14,10 +12,9 @@ CREATE DOMAIN   Phone      VARCHAR(64);
 CREATE DOMAIN   Name       VARCHAR(64);
 CREATE DOMAIN   Link       VARCHAR(255);
 
--- —————————————————————————————————————————————————————————————————————————————
--- User & Auth
+-- Account
 
-CREATE TABLE User {
+CREATE TABLE Account (
     id         SERIAL,
     email      Email UNIQUE,
     phone      Phone UNIQUE,
@@ -27,41 +24,41 @@ CREATE TABLE User {
     host_email Email[] UNIQUE,
     host_phone Phone[] UNIQUE,
 
-    hash       VARCHAR(255) NOT NULL,
-    created    TIMESTAMP DEFAULT NOW(),
-    updated    TIMESTAMP DEFAULT NOW(),
-    seen       TIMESTAMP DEFAULT NOW(),
-    delete_by  TIMESTAMP DEFAULT NOW() + INTERVAL '30 days', -- permanent account is start of linux epoch
+    hash       VARCHAR(255)  NOT NULL,
+    created    TIMESTAMP     DEFAULT NOW(),
+    updated    TIMESTAMP     DEFAULT NOW(),
+    seen       TIMESTAMP     DEFAULT NOW(),
+    -- permanent account is start of linux epoch
+    delete_by  TIMESTAMP     DEFAULT NOW() + INTERVAL '30 days',
     about      VARCHAR(255),
     widget     JSONB,
-    is_host    BOOLEAN DEFAULT FALSE,
+    is_host    BOOLEAN       DEFAULT FALSE,
 
     PRIMARY KEY (id)
-};
+);
 
-CREATE TABLE Session {
+CREATE TABLE Session (
     id       SERIAL,
     token    VARCHAR(255) UNIQUE,
     expiry   TIMESTAMP,
     client   BOOLEAN DEFAULT TRUE,
 
     PRIMARY KEY (id)
-}
+);
 
-CREATE TABLE Settings {
+CREATE TABLE Settings (
     id       SERIAL,
-    user_id  INT REFERENCES USER(id),
+    user_id  INT REFERENCES Account(id),
 
     PRIMARY KEY (id)
-}
+);
 
--- —————————————————————————————————————————————————————————————————————————————
 -- Party
 
-CREATE TABLE Party {
+CREATE TABLE Party (
     id              SERIAL,
     party_name      Name,
-    host_id         INT REFERENCES USER(id),
+    host_id         INT REFERENCES Account(id),
     chat_id         VARCHAR(255),
     host_email      Email,
     host_phone      Phone,
@@ -82,13 +79,4 @@ CREATE TABLE Party {
     guests          JSONB,
 
     PRIMARY KEY (id)
-};
-
-CREATE TABLE Attendance {
-    guest_id   INT,
-    party_id   INT,
-
-    PRIMARY KEY (guest_id, party_id),
-    FOREIGN KEY (guest_id) REFERENCES USER(id),
-    FOREIGN KEY (party_id) REFERENCES PARTY(id)
-};
+);
