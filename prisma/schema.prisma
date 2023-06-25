@@ -26,12 +26,11 @@ model messages {
 model parties {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(255)
-  hostname    String
   hostid      Int
-  chatid      String     @db.VarChar(255)
+  chatid      String?    @unique @db.VarChar(255)
   bannerimage String // url
-  chatrooms   chatrooms?
-  start_time  DateTime
+  time_start  DateTime
+  time_end    DateTime?
 
   state            String
   city             String
@@ -42,23 +41,36 @@ model parties {
   longitude        Float
   latitude         Float
   plus_code_global String
-  rsvp_users       Int[]
-  users            users?  @relation(fields: [usersId], references: [id])
-  usersId          Int?
+
+  rsvp_users       Int[] // user_profile id's
 }
 
 model sessions {
   name   String   @db.VarChar(255)
   token  String   @id @db.VarChar(255)
   expiry DateTime @db.Timestamp(6)
-  client Boolean  @default(true)
 }
 
-model users {
+model account {
+  id       Int        @id @default(autoincrement())
+  eventee_account_id Int
+  hosting_account_id Int
+}
+
+model user_profile {
   id       Int        @id @default(autoincrement())
   email    String?    @unique @db.VarChar(255)
   phone    String?    @unique @db.VarChar(255)
   hash     String     @db.VarChar(255)
-  messages messages[]
-  parties  parties[]
+  messages  messages[]
+  parties   parties[]
+}
+
+model hosting_profile {
+  id       Int        @id @default(autoincrement())
+  email    String?    @unique @db.VarChar(255)
+  phone    String?    @unique @db.VarChar(255)
+  hash     String     @db.VarChar(255)
+  messages        messages[]
+  parties_hosting parties[]
 }

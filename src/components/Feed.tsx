@@ -15,7 +15,7 @@ const Feed: React.FC<FeedProps> = ({}) => {
     const fetchParties = async () => {
       const response = await client.example.getAll.query();
 
-      setParties(response);
+      setParties(response || []);
     };
     fetchParties();
   }, []);
