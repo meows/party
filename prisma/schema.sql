@@ -64,13 +64,11 @@ CREATE TABLE Party (
    banner_image    Link,
    host_id         INT            NOT NULL,
    chat_id         VARCHAR(255),
-   host_email      Email,
-   host_phone      Phone,
 
    time_start      TIMESTAMP      NOT NULL,
    time_end        TIMESTAMP,
    is_waitlist     BOOLEAN        DEFAULT FALSE NOT NULL,
-   party_size      INT            DEFAULT 10 NOT NULL,
+   party_size      INT            DEFAULT 1000000 NOT NULL,
    price           INT            DEFAULT 0 NOT NULL,
    -- private means unlisted & location is hidden until rsvp
    is_private      BOOLEAN        DEFAULT FALSE NOT NULL,
@@ -93,14 +91,14 @@ CREATE TABLE Party (
 );
 
 CREATE TABLE Attendance (
-   guest     INT,
    party     INT,
+   guest     INT,
    seen      TIMESTAMP   DEFAULT NULL,  -- person was seen at the party(qr code)
    rsvp      RSVP        DEFAULT 'attending' NOT NULL,
    paid      REAL        DEFAULT 0 NOT NULL,
    qr_code   TEXT,       -- svg for qr code
 
-   PRIMARY KEY (guest, party),
+   PRIMARY KEY (party, guest),
    FOREIGN KEY (party) REFERENCES Party(id),
    FOREIGN KEY (guest) REFERENCES Account(id)
 );

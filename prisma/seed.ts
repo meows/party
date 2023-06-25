@@ -1,3 +1,4 @@
+import type { account } from "@prisma/client"
 import { PrismaClient } from "@prisma/client"
 const db = new PrismaClient()
 
@@ -7,16 +8,15 @@ const db = new PrismaClient()
 const accounts = [
    {
       id: 1,
-      host_id: "meow_host_id",
       name: "Meow",
       email: "meow@meow.com",
       phone: "12345678",
-      host_email: ["meow@meow.com"],
-      host_phone: ["12345678"],
+      host_id: "meow_host_id",
+      host_email: "meow@meow.com",
+      host_phone: "12345678",
 
       hash: "example_hash",
       about: "hi",
-      widget: {},
    },
    {
       id: 2,
@@ -24,12 +24,11 @@ const accounts = [
       name: "Moo",
       email: "moo@moo.com",
       phone: "0001112222",
-      host_email: ["moo@moo.com", "moo2@moo.com"],
-      host_phone: ["0001112222"],
+      host_email: "moo@moo.com",
+      host_phone: "0001112222",
 
       hash: "example_hash_moo",
       about: "hi this is moo",
-      widget: {},
       is_host: true,
    },
    {
@@ -38,12 +37,11 @@ const accounts = [
       name: "Bark",
       email: "bark@bark.com",
       phone: "0000000001",
-      host_email: ["bark@bark.com", "bark2@bark.com"],
-      host_phone: ["0000000001"],
+      host_email: "bark@bark.com",
+      host_phone: "0000000001",
 
       hash: "example_hash_bark",
       about: "hi this is bark",
-      widget: {},
       is_host: false,
    },
    {
@@ -52,11 +50,10 @@ const accounts = [
       name: "Woof",
       email: "woof@woof.com",
       phone: "0000000002",
-      host_email: ["woof@woof.com", "woof2@woof.com"],
-      host_phone: ["0000000002"],
+      host_email: "woof@woof.com",
+      host_phone: "0000000002",
       hash: "example_hash_woof",
       about: "hi this is woof",
-      widget: {},
       is_host: false,
    },
 
@@ -64,11 +61,13 @@ const accounts = [
 
 const parties = [
    {
+      id: 1,
       party_name: "Hack Night Party",
+      banner_image: "/public/party/hack-night-party/banner.jpg",
       host_id: 2,
       host_email: "moo@moo.com",
       host_phone: "0001112222",
-      banner_image: "/public/party/hack-night-party/banner.jpg",
+
       time_start: new Date().toUTCString(),
 
       state: "CA",
@@ -81,11 +80,14 @@ const parties = [
       latitude: -122.4194,
       plus_code: "849VQH8R+R9",
       widgets: JSON.stringify({}),
-      guests: JSON.stringify({
-         3: null,
-         4: null,
-      }),
    }
+]
+
+const attendance = [
+   {
+      guest: 1,
+      party: 1,
+   },
 ]
 
 // —————————————————————————————————————————————————————————————————————————————

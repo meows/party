@@ -34,14 +34,13 @@ model party {
   banner_image                       String?      @db.VarChar(255)
   host_id                            Int
   chat_id                            String?      @db.VarChar(255)
-  host_email                         String?      @db.VarChar(255)
-  host_phone                         String?      @db.VarChar(64)
   time_start                         DateTime     @db.Timestamp(6)
   time_end                           DateTime?    @db.Timestamp(6)
   is_waitlist                        Boolean      @default(false)
-  party_size                         Int          @default(10)
+  party_size                         Int          @default(1000000)
   price                              Int          @default(0)
   is_private                         Boolean      @default(false)
+  is_deleted                         Boolean      @default(false)
   state                              String       @db.VarChar(255)
   city                               String       @db.VarChar(255)
   zip                                String       @db.VarChar(255)
@@ -70,14 +69,16 @@ model settings {
 }
 
 model attendance {
-  guest                         Int
   party                         Int
+  guest                         Int
   seen                          DateTime? @db.Timestamp(6)
   rsvp                          rsvp      @default(attending)
+  paid                          Float     @default(0) @db.Real
+  qr_code                       String?
   account                       account   @relation(fields: [guest], references: [id], onDelete: NoAction, onUpdate: NoAction)
   party_attendance_partyToparty party     @relation("attendance_partyToparty", fields: [party], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([guest, party])
+  @@id([party, guest])
 }
 
 enum rsvp {
