@@ -156,7 +156,9 @@ export const partyRouter = createTRPCRouter({
          return result
       }),
 
-   getAll: publicProcedure.query(({ ctx }) => {
-      return ctx.prisma.party.findMany()
-   }),
-})
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.parties.findMany();
+  }),
+
+
+});
