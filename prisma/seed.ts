@@ -65,10 +65,8 @@ const parties = [
       party_name: "Hack Night Party",
       banner_image: "/public/party/hack-night-party/banner.jpg",
       host_id: 2,
-      host_email: "moo@moo.com",
-      host_phone: "0001112222",
 
-      time_start: new Date().toUTCString(),
+      time_start: new Date(),
 
       state: "CA",
       city: "San Francisco",
@@ -85,8 +83,16 @@ const parties = [
 
 const attendance = [
    {
-      guest: 1,
       party: 1,
+      guest: 1,
+   },
+   {
+      party: 1,
+      guest: 2,
+   },
+   {
+      party: 1,
+      guest: 4,
    },
 ]
 
@@ -94,9 +100,17 @@ const attendance = [
 // Execute Query
 
 async function main() {
-   return db.account.createMany({
-      data: accounts,
-   })
+   db.account
+      .createMany({ data: accounts })
+      .catch((e) => console.error("Error creating accounts: ", e))
+   
+   db.party
+      .createMany({ data: parties })
+      .catch((e) => console.error("Error creating parties: ", e))
+
+   db.attendance
+      .createMany({ data: attendance })
+      .catch((e) => console.error("Error creating attendance: ", e))
 }
 
 main()

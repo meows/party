@@ -70,8 +70,9 @@ CREATE TABLE Party (
    is_waitlist     BOOLEAN        DEFAULT FALSE NOT NULL,
    party_size      INT            DEFAULT 1000000 NOT NULL,
    price           INT            DEFAULT 0 NOT NULL,
-   -- private means unlisted & location is hidden until rsvp
+   -- is_private means unlisted & location is hidden until rsvp
    is_private      BOOLEAN        DEFAULT FALSE NOT NULL,
+   -- is_deleted completely hides the party, but saved for bill record reasons
    is_deleted      BOOLEAN        DEFAULT FALSE NOT NULL,
  
    state           VARCHAR(255)   NOT NULL,
@@ -95,8 +96,8 @@ CREATE TABLE Attendance (
    guest     INT,
    seen      TIMESTAMP   DEFAULT NULL,  -- person was seen at the party(qr code)
    rsvp      RSVP        DEFAULT 'attending' NOT NULL,
-   paid      REAL        DEFAULT 0 NOT NULL,
-   qr_code   TEXT,       -- svg for qr code
+   paid      REAL        DEFAULT 0 NOT NULL,   
+   qr_code   TEXT        DEFAULT NULL,  -- svg for qr code
 
    PRIMARY KEY (party, guest),
    FOREIGN KEY (party) REFERENCES Party(id),
