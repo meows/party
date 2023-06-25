@@ -92,13 +92,25 @@ const parties = [
 // Execute Query
 
 async function main() {
-   db.users.createMany({ data: accounts })
+   db.account.create({
+      data: {
+         id: 1,
+         host_id: "meow_host_id",
+         name: "Meow",
+         email: "meow@meow.com",
+         phone: "0",
+         host_email: ["meow@meow.com"],
+         host_phone: ["0"],
+         hash: "secrethash",
+         about: "i like drugs"
+      }
+   })
 }
 
 main()
    .then(async () => db.$disconnect())
    .catch(async (e) => {
-      console.error(e)
+      console.error("Seed error: ", e)
       await db.$disconnect()
       process.exit(1)
    })
