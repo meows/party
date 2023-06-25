@@ -1,9 +1,11 @@
+-- —————————————————————————————————————————————————————————————————————————————
 -- Reset
 
 DROP SCHEMA IF EXISTS party CASCADE;
 CREATE SCHEMA party;
 SET search_path TO party;
 
+-- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
 CREATE TYPE     Property   AS ENUM ('residential', 'commercial');
@@ -12,74 +14,83 @@ CREATE DOMAIN   Phone      VARCHAR(64);
 CREATE DOMAIN   Name       VARCHAR(64);
 CREATE DOMAIN   Link       VARCHAR(255);
 
+-- —————————————————————————————————————————————————————————————————————————————
 -- Account
 
 CREATE TABLE Account (
-    id         SERIAL,
-    name       TEXT,
-    email      Email UNIQUE,
-    phone      Phone UNIQUE,
-    host_id    TEXT UNIQUE,
-    -- used as drop-down options for party creation; 0th is default.
-    -- on creation, the `email` and `phone` will be duplicated into 
-    -- `host_email` and `host_phone`; user can change later.
-    host_email TEXT[] UNIQUE,
-    host_phone TEXT[] UNIQUE,
+   id         SERIAL,
+   name       TEXT     NOT NULL,
+   email      Email    UNIQUE NOT NULL,
+   phone      Phone    UNIQUE,
+   host_id    TEXT     UNIQUE NOT NULL,
+   -- used as drop-down options for party creation; 0th is default.
+   -- on creation, the `email` and `phone` will be duplicated into
+   -- `host_email` and `host_phone`; user can change later.
+   host_email TEXT[]   UNIQUE,
+   host_phone TEXT[]   UNIQUE,
+   hash       TEXT        NOT NULL,
+   about      TEXT,
+   is_host    BOOLEAN     DEFAULT FALSE,
 
-    hash       TEXT          NOT NULL,
-    created    TIMESTAMP     DEFAULT NOW(),
-    updated    TIMESTAMP     DEFAULT NOW(),
-    seen       TIMESTAMP     DEFAULT NOW(),
-    -- permanent account is start of linux epoch
-    delete_by  TIMESTAMP     DEFAULT NOW() + INTERVAL '30 days',
-    about      TEXT,
-    widget     JSONB,
-    is_host    BOOLEAN       DEFAULT FALSE,
+   created    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   updated    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   seen       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   delete_by  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 days',
 
-    PRIMARY KEY (id)
+   PRIMARY KEY (id)
 );
 
 CREATE TABLE Session (
-    id       SERIAL,
-    token    VARCHAR(255) UNIQUE,
-    expiry   TIMESTAMP,
-    client   BOOLEAN DEFAULT TRUE,
+   token    VARCHAR(255),
+   expiry   TIMESTAMP       NOT NULL,
 
-    PRIMARY KEY (id)
+   PRIMARY KEY (token)
 );
 
 CREATE TABLE Settings (
-    id       SERIAL,
-    user_id  INT REFERENCES Account(id),
+   id        SERIAL,
+   user_id   INT,
 
-    PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   FOREIGN KEY (user_id) REFERENCES Account(id)
 );
 
+-- —————————————————————————————————————————————————————————————————————————————
 -- Party
 
 CREATE TABLE Party (
-    id              SERIAL,
-    party_name      VARCHAR(255),
-    host_id         TEXT REFERENCES Account(host_id),
-    chat_id         VARCHAR(255),
-    host_email      Email,
-    host_phone      Phone,
-    time_start      TIMESTAMP NOT NULL,
-    time_end        TIMESTAMP,
-    banner_image    Link,
+   id             SERIAL,
+   party_name     VARCHAR(255)    NOT NULL,
+   host_id        INT             NOT NULL,
+   chat_id        VARCHAR(255),
+   host_email     Email,
+   host_phone     Phone,
+   time_start     TIMESTAMP       NOT NULL,
+   time_end       TIMESTAMP,
+   banner_image   Link,
 
-    state           VARCHAR(255),
-    city            VARCHAR(255),
-    zip             VARCHAR(255),
-    street_number   VARCHAR(255),
-    street          VARCHAR(255),
-    unit            VARCHAR(255),
-    longitude       DOUBLE PRECISION,
-    latitude        DOUBLE PRECISION,
-    -- global plus code
-    plus_code       VARCHAR(255),
-    widgets         JSONB,
-    guests          JSONB,
+   state           VARCHAR(255)   NOT NULL,
+   city            VARCHAR(255)   NOT NULL,
+   zip             VARCHAR(255)   NOT NULL,
+   street_number   VARCHAR(255)   NOT NULL,
+   street          VARCHAR(255)   NOT NULL,
+   unit            VARCHAR(255)   NOT NULL,
+   longitude       REAL           NOT NULL,
+   latitude        REAL           NOT NULL,
+   plus_code       VARCHAR(255),
 
-    PRIMARY KEY (id)
+   widgets         JSONB,
+   guests          JSONB,
+
+   PRIMARY KEY (id),
+   FOREIGN KEY (host_id) REFERENCES Account(id)
+);
+
+CREATE TABLE Attendance (
+   user_id   INT,
+   party_id  INT,
+
+   PRIMARY KEY (user_id, party_id),
+   FOREIGN KEY (party_id)            REFERENCES Party(id),
+   FOREIGN KEY (user_id)             REFERENCES Account(id)
 );
