@@ -100,15 +100,15 @@ const attendance = [
 // Execute Query
 
 async function main() {
-   db.account
+   await db.account
       .createMany({ data: accounts })
       .catch((e) => console.error("Error creating accounts: ", e))
    
-   db.party
+   await db.party
       .createMany({ data: parties })
       .catch((e) => console.error("Error creating parties: ", e))
 
-   db.attendance
+   await db.attendance
       .createMany({ data: attendance })
       .catch((e) => console.error("Error creating attendance: ", e))
 }
