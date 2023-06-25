@@ -87,6 +87,7 @@ CREATE TABLE Party (
 CREATE TABLE Attendance (
    user_id   INT,
    party_id  INT,
+   seen      TIMESTAMP   DEFAULT NULL,
 
    PRIMARY KEY (user_id, party_id),
    FOREIGN KEY (party_id)            REFERENCES Party(id),
