@@ -75,7 +75,7 @@ CREATE TABLE Party (
    -- private means unlisted & location is hidden until rsvp
    is_private      BOOLEAN        DEFAULT FALSE NOT NULL,
    is_deleted      BOOLEAN        DEFAULT FALSE NOT NULL,
-
+ 
    state           VARCHAR(255)   NOT NULL,
    city            VARCHAR(255)   NOT NULL,
    zip             VARCHAR(255)   NOT NULL,
