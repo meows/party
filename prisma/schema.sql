@@ -24,13 +24,12 @@ CREATE TABLE Account (
    phone        Phone       UNIQUE,
    host_id      TEXT        UNIQUE NOT NULL,
    -- used as drop-down options for party creation; 0th is default.
-   -- on creation, the `email` and `phone` will be duplicated into
-   -- `host_email` and `host_phone`; user can change later.
-   host_email   TEXT[]      UNIQUE,
-   host_phone   TEXT[]      UNIQUE,
+   -- on creation, the `email` and `phone` will be duplicated into `host_email` and `host_phone`
+   host_email   Email       UNIQUE,
+   host_phone   Phone       UNIQUE,
    hash         TEXT        NOT NULL,
    about        TEXT,
-   is_host      BOOLEAN     DEFAULT FALSE,
+   is_host      BOOLEAN     DEFAULT FALSE NOT NULL,
    created      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    updated      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    seen         TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -85,9 +84,9 @@ CREATE TABLE Party (
 );
 
 CREATE TABLE Attendance (
-   user_id   INT,
-   party_id  INT,
-   seen      TIMESTAMP   DEFAULT NULL,
+   user_id    INT,
+   party_id   INT,
+   seen       TIMESTAMP   DEFAULT NULL,
 
    PRIMARY KEY (user_id, party_id),
    FOREIGN KEY (party_id)            REFERENCES Party(id),
