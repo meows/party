@@ -9,16 +9,18 @@ datasource db {
 
 model account {
   id         Int        @id @default(autoincrement())
+  name       String?
   email      String?    @unique @db.VarChar(255)
   phone      String?    @unique @db.VarChar(64)
-  host_email String[]   @unique @db.VarChar(255)
-  host_phone String[]   @unique @db.VarChar(255)
-  hash       String     @db.VarChar(255)
+  host_id    String?    @unique
+  host_email String[]   @unique
+  host_phone String[]   @unique
+  hash       String
   created    DateTime?  @default(now()) @db.Timestamp(6)
   updated    DateTime?  @default(now()) @db.Timestamp(6)
   seen       DateTime?  @default(now()) @db.Timestamp(6)
   delete_by  DateTime?  @default(dbgenerated("(now() + '30 days'::interval)")) @db.Timestamp(6)
-  about      String?    @db.VarChar(255)
+  about      String?
   widget     Json?
   is_host    Boolean?   @default(false)
   party      party[]
@@ -28,11 +30,11 @@ model account {
 model party {
   id            Int       @id @default(autoincrement())
   party_name    String?   @db.VarChar(255)
-  host_id       Int?
+  host_id       String?
   chat_id       String?   @db.VarChar(255)
   host_email    String?   @db.VarChar(255)
   host_phone    String?   @db.VarChar(64)
-  time_start    DateTime? @db.Timestamp(6)
+  time_start    DateTime  @db.Timestamp(6)
   time_end      DateTime? @db.Timestamp(6)
   banner_image  String?   @db.VarChar(255)
   state         String?   @db.VarChar(255)
@@ -46,7 +48,7 @@ model party {
   plus_code     String?   @db.VarChar(255)
   widgets       Json?
   guests        Json?
-  account       account?  @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  account       account?  @relation(fields: [host_id], references: [host_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model session {

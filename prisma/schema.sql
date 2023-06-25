@@ -16,21 +16,23 @@ CREATE DOMAIN   Link       VARCHAR(255);
 
 CREATE TABLE Account (
     id         SERIAL,
+    name       TEXT,
     email      Email UNIQUE,
     phone      Phone UNIQUE,
+    host_id    TEXT UNIQUE,
     -- used as drop-down options for party creation; 0th is default.
     -- on creation, the `email` and `phone` will be duplicated into 
     -- `host_email` and `host_phone`; user can change later.
-    host_email VARCHAR(255)[] UNIQUE,
-    host_phone VARCHAR(255)[] UNIQUE,
+    host_email TEXT[] UNIQUE,
+    host_phone TEXT[] UNIQUE,
 
-    hash       VARCHAR(255)  NOT NULL,
+    hash       TEXT          NOT NULL,
     created    TIMESTAMP     DEFAULT NOW(),
     updated    TIMESTAMP     DEFAULT NOW(),
     seen       TIMESTAMP     DEFAULT NOW(),
     -- permanent account is start of linux epoch
     delete_by  TIMESTAMP     DEFAULT NOW() + INTERVAL '30 days',
-    about      VARCHAR(255),
+    about      TEXT,
     widget     JSONB,
     is_host    BOOLEAN       DEFAULT FALSE,
 
@@ -58,11 +60,11 @@ CREATE TABLE Settings (
 CREATE TABLE Party (
     id              SERIAL,
     party_name      VARCHAR(255),
-    host_id         INT REFERENCES Account(id),
+    host_id         TEXT REFERENCES Account(host_id),
     chat_id         VARCHAR(255),
     host_email      Email,
     host_phone      Phone,
-    time_start      TIMESTAMP,
+    time_start      TIMESTAMP NOT NULL,
     time_end        TIMESTAMP,
     banner_image    Link,
 
@@ -74,6 +76,7 @@ CREATE TABLE Party (
     unit            VARCHAR(255),
     longitude       DOUBLE PRECISION,
     latitude        DOUBLE PRECISION,
+    -- global plus code
     plus_code       VARCHAR(255),
     widgets         JSONB,
     guests          JSONB,
