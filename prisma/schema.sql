@@ -39,10 +39,12 @@ CREATE TABLE Account (
 );
 
 CREATE TABLE Session (
+   user     INT            NOT NULL,
    token    VARCHAR(255),
    expiry   TIMESTAMP      NOT NULL,
 
    PRIMARY KEY (token)
+   FOREIGN KEY (user) REFERENCES Account(id)
 );
 
 CREATE TABLE Settings (
