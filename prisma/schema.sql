@@ -8,7 +8,7 @@ SET search_path TO party;
 -- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
-CREATE TYPE     Property   AS ENUM ('residential', 'commercial');
+CREATE TYPE     RSVP       AS ENUM ('attending', 'cancelled', 'waitlist');
 CREATE DOMAIN   Email      VARCHAR(255);
 CREATE DOMAIN   Phone      VARCHAR(64);
 CREATE DOMAIN   Name       VARCHAR(64);
@@ -33,18 +33,9 @@ CREATE TABLE Account (
    created      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    updated      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    seen         TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   delete_by    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 days',
+   delete_by    TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days'),
 
    PRIMARY KEY (id)
-);
-
-CREATE TABLE Session (
-   user     INT            NOT NULL,
-   token    VARCHAR(255),
-   expiry   TIMESTAMP      NOT NULL,
-
-   PRIMARY KEY (token)
-   FOREIGN KEY (user) REFERENCES Account(id)
 );
 
 CREATE TABLE Settings (
@@ -53,6 +44,15 @@ CREATE TABLE Settings (
 
    PRIMARY KEY (id),
    FOREIGN KEY (guest) REFERENCES Account(id)
+);
+
+CREATE TABLE Session (
+   user     INT            NOT NULL,
+   token    VARCHAR(255),
+   expiry   TIMESTAMP      NOT NULL,
+
+   PRIMARY KEY (token),
+   FOREIGN KEY (user) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -89,6 +89,7 @@ CREATE TABLE Attendance (
    guest   INT,
    party   INT,
    seen    TIMESTAMP   DEFAULT NULL,
+   rsvp    RSVP        DEFAULT 'attending' NOT NULL,
 
    PRIMARY KEY (guest, party),
    FOREIGN KEY (party) REFERENCES Party(id),
