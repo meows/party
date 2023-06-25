@@ -92,18 +92,8 @@ const parties = [
 // Execute Query
 
 async function main() {
-   return db.account.create({
-      data: {
-         id: 1,
-         host_id: "meow_host_id",
-         name: "Meow",
-         email: "meow@meow.com",
-         phone: "0",
-         host_email: ["meow@meow.com"],
-         host_phone: ["0"],
-         hash: "secrethash",
-         about: "i like drugs"
-      }
+   return db.account.createMany({
+      data: accounts,
    })
 }
 
