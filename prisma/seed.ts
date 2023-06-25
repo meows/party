@@ -92,7 +92,7 @@ const parties = [
 // Execute Query
 
 async function main() {
-   db.account.create({
+   return db.account.create({
       data: {
          id: 1,
          host_id: "meow_host_id",
