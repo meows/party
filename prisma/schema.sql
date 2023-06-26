@@ -32,6 +32,18 @@ CREATE TABLE Account (
    PRIMARY KEY (id)
 );
 
+CREATE TABLE Profile (
+   account     INT,
+   about       TEXT   DEFAULT NULL,
+   twitter     Link   DEFAULT NULL,
+   facebook    Link   DEFAULT NULL,
+   instagram   Link   DEFAULT NULL,
+   website     Link   DEFAULT NULL,
+
+   PRIMARY KEY (account),
+   FOREIGN KEY (account) REFERENCES Account(id)
+)
+
 CREATE TABLE Settings (
    id        SERIAL,
    account   INT,
