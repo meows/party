@@ -8,24 +8,21 @@ datasource db {
 }
 
 model account {
-  id                               Int          @id @default(autoincrement())
-  name                             String
-  email                            String       @unique @db.VarChar(255)
-  phone                            String?      @unique @db.VarChar(64)
-  host_id                          String       @unique
-  host_email                       String?      @unique @db.VarChar(255)
-  host_phone                       String?      @unique @db.VarChar(64)
-  hash                             String
-  about                            String?
-  is_host                          Boolean      @default(false)
-  created                          DateTime     @default(now()) @db.Timestamp(6)
-  updated                          DateTime     @default(now()) @db.Timestamp(6)
-  seen                             DateTime     @default(now()) @db.Timestamp(6)
-  delete_by                        DateTime?    @default(dbgenerated("(CURRENT_TIMESTAMP + '30 days'::interval)")) @db.Timestamp(6)
-  attendance                       attendance[]
-  party                            party[]
-  session_session_accountToaccount session[]    @relation("session_accountToaccount")
-  settings                         settings[]
+  id                                 Int          @id @default(autoincrement())
+  name                               String
+  email                              String       @unique @db.VarChar(255)
+  phone                              String?      @unique @db.VarChar(64)
+  hash                               String
+  about                              String?
+  created                            DateTime     @default(now()) @db.Timestamp(6)
+  updated                            DateTime     @default(now()) @db.Timestamp(6)
+  seen                               DateTime     @default(now()) @db.Timestamp(6)
+  delete_by                          DateTime?    @default(dbgenerated("(CURRENT_TIMESTAMP + '30 days'::interval)")) @db.Timestamp(6)
+  attendance                         attendance[]
+  party                              party[]
+  profile_profile_accountToaccount   profile?     @relation("profile_accountToaccount")
+  session_session_accountToaccount   session[]    @relation("session_accountToaccount")
+  settings_settings_accountToaccount settings?    @relation("settings_accountToaccount")
 }
 
 model party {
@@ -41,16 +38,15 @@ model party {
   price                              Int          @default(0)
   is_private                         Boolean      @default(false)
   is_deleted                         Boolean      @default(false)
+  widgets                            Json?
   state                              String       @db.VarChar(255)
   city                               String       @db.VarChar(255)
   zip                                String       @db.VarChar(255)
-  street_number                      String       @db.VarChar(255)
   street                             String       @db.VarChar(255)
-  unit                               String       @db.VarChar(255)
+  unit                               String?      @db.VarChar(255)
   longitude                          Float        @db.Real
   latitude                           Float        @db.Real
   plus_code                          String?      @db.VarChar(255)
-  widgets                            Json?
   attendance_attendance_partyToparty attendance[] @relation("attendance_partyToparty")
   account                            account      @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -63,9 +59,9 @@ model session {
 }
 
 model settings {
-  id      Int      @id @default(autoincrement())
-  guest   Int?
-  account account? @relation(fields: [guest], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  account                           Int     @id
+  is_host                           Boolean @default(false)
+  account_settings_accountToaccount account @relation("settings_accountToaccount", fields: [account], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model attendance {
@@ -79,6 +75,16 @@ model attendance {
   party_attendance_partyToparty party     @relation("attendance_partyToparty", fields: [party], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([party, guest])
+}
+
+model profile {
+  account                          Int     @id
+  about                            String?
+  twitter                          String? @db.VarChar(255)
+  facebook                         String? @db.VarChar(255)
+  instagram                        String? @db.VarChar(255)
+  website                          String? @db.VarChar(255)
+  account_profile_accountToaccount account @relation("profile_accountToaccount", fields: [account], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum rsvp {
