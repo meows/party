@@ -18,22 +18,17 @@ CREATE DOMAIN   Link    VARCHAR(255);
 -- Account
 
 CREATE TABLE Account (
-   id           SERIAL,
-   name         TEXT        NOT NULL,
-   email        Email       UNIQUE NOT NULL,
-   phone        Phone       UNIQUE,
-   host_id      TEXT        UNIQUE NOT NULL,
-   -- used as drop-down options for party creation; 0th is default.
-   -- on creation, the `email` and `phone` will be duplicated into `host_email` and `host_phone`
-   host_email   Email       UNIQUE,
-   host_phone   Phone       UNIQUE,
-   hash         TEXT        NOT NULL,
-   about        TEXT,
-   is_host      BOOLEAN     DEFAULT FALSE NOT NULL,
-   created      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   updated      TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   seen         TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   delete_by    TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days'),
+   id          SERIAL,
+   name        TEXT        NOT NULL,
+   email       Email       UNIQUE NOT NULL,
+   phone       Phone       UNIQUE,
+   hash        TEXT        NOT NULL,
+   about       TEXT,
+   is_host     BOOLEAN     DEFAULT FALSE NOT NULL,
+   created     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   updated     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   seen        TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   delete_by   TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days'),
 
    PRIMARY KEY (id)
 );
