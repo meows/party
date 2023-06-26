@@ -22,7 +22,8 @@
    npx prisma db push
    ```
 
-   Run the DB seed script `~/prisma/seed.ts` for initial data.
+   Run the DB seed script `seed.ts` for initial data. The script is idempotent 
+   so you can run it again to reset the DB data.
    ```
    npx prisma db seed
    ```
