@@ -3,6 +3,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { party } from '@prisma/client'
+import Image from 'next/image';
 
 type PartyCardProps = {
     party: party
@@ -12,7 +13,7 @@ const PartyCard: React.FC<PartyCardProps> = ({party}) => {
     return (
         <div className='party_card'>
             <div className='flex justify-between items-start gap-5'>
-                <img
+                <Image
                     src={party.banner_image ?? ""}
                     alt="party_banner"
                     width={40}
@@ -22,7 +23,8 @@ const PartyCard: React.FC<PartyCardProps> = ({party}) => {
 
             </div>
             <div className='flex flex-col'>
-                <h3>{party.host_email}</h3>
+                {/* need to first fetch the account tables to get the host's name */}
+                <h3>{party.host_id}</h3>
                 <p>{party.party_name}</p>
             </div>
         </div>

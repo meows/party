@@ -24,7 +24,7 @@ const Feed: React.FC<FeedProps> = ({}) => {
     <div>
       <section className="feed">
         <div className="prompt_layout mt-5">
-          { parties_list.map(party => <PartyCard party={party} /> )}
+          { parties_list.map((party, i) => <PartyCard key={i} party={party} /> )}
         </div>
       </section>
     </div>

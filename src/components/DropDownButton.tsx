@@ -17,7 +17,7 @@ type DropDownButtonProps<T> = React.PropsWithChildren<{
 }>;
 
 type DropDownItemProps = React.PropsWithChildren<{
-  setSelected: (value: string) => void;
+  setSelected?: (value: string) => void;
 }>;
 
 // —————————————————————————————————————————————————————————————————————————————

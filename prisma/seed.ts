@@ -51,7 +51,11 @@ const parties = [
    {
       id: 1,
       party_name: "Hack Night Party",
+<<<<<<< HEAD
       banner_image: "/party/banner.jpg",
+=======
+      banner_image: "/party/hack-night-party/banner.jpg",
+>>>>>>> f239a51 (idk)
       host_id: 2,
       time_start: new Date(),
       state: "CA",
