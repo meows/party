@@ -41,16 +41,15 @@ model party {
   price                              Int          @default(0)
   is_private                         Boolean      @default(false)
   is_deleted                         Boolean      @default(false)
+  widgets                            Json?
   state                              String       @db.VarChar(255)
   city                               String       @db.VarChar(255)
   zip                                String       @db.VarChar(255)
-  street_number                      String       @db.VarChar(255)
   street                             String       @db.VarChar(255)
-  unit                               String       @db.VarChar(255)
+  unit                               String?      @db.VarChar(255)
   longitude                          Float        @db.Real
   latitude                           Float        @db.Real
   plus_code                          String?      @db.VarChar(255)
-  widgets                            Json?
   attendance_attendance_partyToparty attendance[] @relation("attendance_partyToparty")
   account                            account      @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

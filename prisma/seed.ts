@@ -101,6 +101,10 @@ const attendance = [
    { party: 1, guest: 1, },
    { party: 1, guest: 2, },
    { party: 1, guest: 4, },
+   { party: 2, guest: 1, },
+   { party: 2, guest: 2, },
+   { party: 2, guest: 3, },
+   { party: 2, guest: 4, },
 ]
 
 // —————————————————————————————————————————————————————————————————————————————
