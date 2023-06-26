@@ -5,20 +5,6 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "~/server/
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"]
 
 export const partyRouter = createTRPCRouter({
-   getParty: protectedProcedure
-      .input(z.object({ id: z.number() }))
-      .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.party.findUnique({
-            where: {
-               id: input.id,
-            },
-         })
-
-         return {
-            party: result,
-         }
-      }),
-
    getPartiesByHost: protectedProcedure
       .input(z.number())
       .query(async ({ ctx, input }) => {
@@ -113,7 +99,7 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
@@ -157,24 +143,20 @@ export const partyRouter = createTRPCRouter({
       }),
 
    deleteParty: protectedProcedure
-      .input(
-         z.object({
-            id: z.number(),
-         })
-      )
-      .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.delete({
-            where: {
-               id: input.id,
-            },
-         })
-
-         return {
-            result: result,
-         }
+      .input(z.number())
+      .mutation(async ({ ctx, input }) => {
+         const result = await ctx.prisma.party
+            .update({ where: { id: input }, data: { is_deleted: true } })
+            .catch(message => {
+               throw new TRPCError({
+                  code: "INTERNAL_SERVER_ERROR",
+                  message,
+               })
+            })
+         return result
       }),
 
    getAll: publicProcedure.query(({ ctx }) => {
-      return ctx.prisma.parties.findMany()
+      return ctx.prisma.party.findMany()
    }),
 })
