@@ -20,7 +20,6 @@ const accounts = [
       phone: "0001112222",
       hash: "example_hash_moo",
       about: "hi this is moo",
-      is_host: true,
    },
    {
       id: 3,
@@ -97,7 +96,7 @@ const attendance = [
 
 async function main() {
    db.$transaction([
-      db.$executeRaw`TRUNCATE TABLE account CASCADE;`,
+      db.$executeRaw`TRUNCATE TABLE Account CASCADE;`,
       db.account.createMany({ data: accounts }),
       db.party.createMany({ data: parties }),
       db.attendance.createMany({ data: attendance }),

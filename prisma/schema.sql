@@ -45,11 +45,10 @@ CREATE TABLE Profile (
 )
 
 CREATE TABLE Settings (
-   id        SERIAL,
    account   INT,
-   is_host   BOOLEAN   DEFAULT FALSE NOT NULL,
+   is_host   BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
 
-   PRIMARY KEY (id),
+   PRIMARY KEY (account),
    FOREIGN KEY (account) REFERENCES Account(id)
 );
 
@@ -107,3 +106,9 @@ CREATE TABLE Attendance (
    FOREIGN KEY (party) REFERENCES Party(id),
    FOREIGN KEY (guest) REFERENCES Account(id)
 );
+
+-- —————————————————————————————————————————————————————————————————————————————
+-- Indices
+
+CREATE INDEX idx_party_time_start ON Party (time_start) WHERE NOT is_deleted;
+CREATE INDEX idx_party_time_end   ON Party (time_end)   WHERE NOT is_deleted;
