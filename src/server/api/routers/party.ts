@@ -57,28 +57,22 @@ export const partyRouter = createTRPCRouter({
       }),
 
    makeParty: protectedProcedure
-      .input(
-         z.object({
-            name: z.string(),
-            host: z.number(),
-            hostid: z.number(),
-            chatid: z.string(),
-            bannerimage: z
-               .any()
-               .refine(
-                  (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-                  "Error: only .jpeg, .jpg, and .png types are accepted"
-               ),
-         })
-      )
+      .input(z.object({
+         name: z.string(),
+         host: z.number(),
+         hostid: z.number(),
+         chatid: z.string(),
+         bannerimage: z.any().refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            "Error: only .jpeg, .jpg, and .png types are accepted"
+         ),
+      }))
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.create({
+         const result = await ctx.prisma.party.create({
             data: {
-               name: input.name,
-               host: input.host,
-               hostid: input.hostid,
-               chatid: input.chatid,
-               bannerimage: input.bannerimage,
+               party_name: input.name,
+               host_id: input.host,
+
             },
          })
 
