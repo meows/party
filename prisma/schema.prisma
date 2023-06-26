@@ -12,9 +12,6 @@ model account {
   name                             String
   email                            String       @unique @db.VarChar(255)
   phone                            String?      @unique @db.VarChar(64)
-  host_id                          String       @unique
-  host_email                       String?      @unique @db.VarChar(255)
-  host_phone                       String?      @unique @db.VarChar(64)
   hash                             String
   about                            String?
   is_host                          Boolean      @default(false)
