@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { parties } from "@prisma/client";
+import { party } from "@prisma/client";
 
 import PartyCard from "./PartyCard";
 import { api } from "~/utils/api";
@@ -8,7 +8,7 @@ import { api } from "~/utils/api";
 type FeedProps = {};
 
 const Feed: React.FC<FeedProps> = ({}) => {
-  const [parties_list, setParties] = useState<parties[]>([]);
+  const [ parties_list, setParties ] = useState<party[]>([]);
   const { client } = api.useContext();
 
   useEffect(() => {
