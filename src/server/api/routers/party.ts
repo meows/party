@@ -6,11 +6,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"]
 
 export const partyRouter = createTRPCRouter({
    getParty: protectedProcedure
-      .input(
-         z.object({
-            id: z.number(),
-         })
-      )
+      .input(z.object({ id: z.number() }))
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party.findUnique({
             where: {
