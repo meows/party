@@ -24,7 +24,6 @@ CREATE TABLE Account (
    phone       Phone       UNIQUE,
    hash        TEXT        NOT NULL,
    about       TEXT,
-   is_host     BOOLEAN     DEFAULT FALSE NOT NULL,
    created     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    updated     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    seen        TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -34,11 +33,12 @@ CREATE TABLE Account (
 );
 
 CREATE TABLE Settings (
-   id      SERIAL,
-   guest   INT,
+   id        SERIAL,
+   account   INT,
+   is_host   BOOLEAN   DEFAULT FALSE NOT NULL,
 
    PRIMARY KEY (id),
-   FOREIGN KEY (guest) REFERENCES Account(id)
+   FOREIGN KEY (account) REFERENCES Account(id)
 );
 
 CREATE TABLE Session (
