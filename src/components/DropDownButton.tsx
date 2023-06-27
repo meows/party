@@ -33,7 +33,7 @@ const DropDownItem: React.FC<DropDownItemProps> = ({
       {({ active }) => (
         <button
           onClick={() => {
-            setSelected(children!.valueOf() as string);
+            (setSelected as Function)(children!.valueOf() as string);
           }}
           className={classNames(
             active ? "bg-gray-100 text-gray-900" : "text-gray-700",
