@@ -16,6 +16,7 @@ export const partyRouter = createTRPCRouter({
                   message,
                })
             })
+         return result
       }),
    getPartiesByGuest: protectedProcedure
       .input(z.number())
@@ -28,6 +29,7 @@ export const partyRouter = createTRPCRouter({
                   message,
                })
             })
+         return result
       }),
    getPartiesByCity: protectedProcedure
       .input(z.string())
@@ -40,6 +42,7 @@ export const partyRouter = createTRPCRouter({
                   message,
                })
             })
+         return result
       }),
 
    makeParty: protectedProcedure
