@@ -33,32 +33,32 @@ CREATE TABLE Account (
 );
 
 CREATE TABLE Profile (
-   account     INT,
-   about       TEXT   DEFAULT NULL,
-   twitter     Link   DEFAULT NULL,
-   facebook    Link   DEFAULT NULL,
-   instagram   Link   DEFAULT NULL,
-   website     Link   DEFAULT NULL,
+   profile_id   INT,
+   about        TEXT   DEFAULT NULL,
+   twitter      Link   DEFAULT NULL,
+   facebook     Link   DEFAULT NULL,
+   instagram    Link   DEFAULT NULL,
+   website      Link   DEFAULT NULL,
 
-   PRIMARY KEY (account),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   PRIMARY KEY (profile_id),
+   FOREIGN KEY (profile_id) REFERENCES Account(id)
 )
 
-CREATE TABLE Settings (
-   account   INT,
-   is_host   BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
+CREATE TABLE Setting (
+   setting_id   INT,
+   is_host      BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
 
-   PRIMARY KEY (account),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   PRIMARY KEY (setting_id),
+   FOREIGN KEY (setting_id) REFERENCES Account(id)
 );
 
 CREATE TABLE Session (
-   account   INT         NOT NULL,
-   token     TEXT        NOT NULL,
-   expiry    TIMESTAMP   NOT NULL,
+   session_id   INT         NOT NULL,
+   token        TEXT        NOT NULL,
+   expiry       TIMESTAMP   NOT NULL,
 
    PRIMARY KEY (token),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   FOREIGN KEY (session_id) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -70,6 +70,7 @@ CREATE TABLE Party (
    id            SERIAL,
    party_name    TEXT        NOT NULL,
    banner        Link        DEFAULT NULL,
+   host          INT         NOT NULL,
    chat_id       TEXT        DEFAULT NULL,
    created       TIMESTAMP   DEFAULT NOW() NOT NULL,
    time_start    TIMESTAMP   NOT NULL,
@@ -89,7 +90,7 @@ CREATE TABLE Party (
    latitude      REAL        NOT NULL,
 
    PRIMARY KEY (id),
-   FOREIGN KEY (host_id) REFERENCES Account(id)
+   FOREIGN KEY (host) REFERENCES Account(id)
 );
 
 CREATE TABLE Attendance (
