@@ -8,7 +8,7 @@ SET search_path TO party;
 -- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
-CREATE TYPE     RSVP    AS ENUM ('attending', 'waitlist');
+CREATE TYPE     RSVP    AS ENUM ('yes', 'no', 'maybe', 'waitlist');
 CREATE DOMAIN   Email   VARCHAR(255);
 CREATE DOMAIN   Phone   VARCHAR(64);
 CREATE DOMAIN   Name    VARCHAR(64);
@@ -24,10 +24,10 @@ CREATE TABLE Account (
    phone       Phone       UNIQUE,
    hash        TEXT        NOT NULL,
    about       TEXT        DEFAULT NULL,
-   created     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   updated     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   seen        TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   delete_by   TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days'),
+   created     TIMESTAMP   DEFAULT NOW() NOT NULL,
+   updated     TIMESTAMP   DEFAULT NOW() NOT NULL,
+   seen        TIMESTAMP   DEFAULT NOW() NOT NULL,
+   delete_by   TIMESTAMP   DEFAULT (NOW() + INTERVAL '30 days'),
 
    PRIMARY KEY (id)
 );
