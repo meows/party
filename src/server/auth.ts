@@ -8,6 +8,7 @@ import {
 import DiscordProvider from "next-auth/providers/discord";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { TRPCError } from "@trpc/server"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -74,3 +75,50 @@ export const getServerAuthSession = (ctx: {
 }) => {
   return getServerSession(ctx.req, ctx.res, authOptions);
 };
+
+
+/*
+todo write docs
+*/
+export interface session {
+  account : Number;
+  token : String;
+  expiry : Date;
+}
+
+export const validateUser = async (
+  id:number, 
+  token:string
+  ) => {
+
+    const result = await prisma.session
+    .findMany({where: 
+            { 
+              account: id,
+              token : token 
+            } } )
+    .catch(message => {
+              throw new TRPCError({
+                 code: "INTERNAL_SERVER_ERROR",
+                 message,
+              })})
+    
+   const now = new Date();
+
+    if(!result[0])
+    {
+      throw new Error("Session does not currently exist");
+    }
+    else if(result[0]?.expiry < now)
+    {
+      throw new Error("Session has expired");
+    }
+
+    let currentSession : session = {
+      account : id,
+      token : token,
+      expiry : result[0]?.expiry
+    }
+
+    return currentSession;
+  };
