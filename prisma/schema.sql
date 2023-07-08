@@ -73,9 +73,9 @@ CREATE TABLE Party (
    chat_id        VARCHAR(255),
    created        TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
    time_start     TIMESTAMP      NOT NULL,
-   time_end       TIMESTAMP,
+   time_end       TIMESTAMP      DEFAULT NULL,
    is_waitlist    BOOLEAN        DEFAULT FALSE NOT NULL,
-   party_size     INT            DEFAULT 1000000 NOT NULL,
+   party_size     INT            DEFAULT NULL,  -- null = infinite
    price          INT            DEFAULT 0 NOT NULL,
    is_private     BOOLEAN        DEFAULT FALSE NOT NULL,
    is_deleted     BOOLEAN        DEFAULT FALSE NOT NULL,
