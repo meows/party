@@ -33,32 +33,32 @@ CREATE TABLE Account (
 );
 
 CREATE TABLE Profile (
-   profile_id   INT,
-   about        TEXT   DEFAULT NULL,
-   twitter      Link   DEFAULT NULL,
-   facebook     Link   DEFAULT NULL,
-   instagram    Link   DEFAULT NULL,
-   website      Link   DEFAULT NULL,
+   profile_owner   INT,
+   about           TEXT   DEFAULT NULL,
+   twitter         Link   DEFAULT NULL,
+   facebook        Link   DEFAULT NULL,
+   instagram       Link   DEFAULT NULL,
+   website         Link   DEFAULT NULL,
 
-   PRIMARY KEY (profile_id),
-   FOREIGN KEY (profile_id) REFERENCES Account(id)
+   PRIMARY KEY (profile_owner),
+   FOREIGN KEY (profile_owner) REFERENCES Account(id)
 )
 
 CREATE TABLE Setting (
-   setting_id   INT,
-   is_host      BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
+   setting_owner   INT,
+   is_host         BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
 
-   PRIMARY KEY (setting_id),
-   FOREIGN KEY (setting_id) REFERENCES Account(id)
+   PRIMARY KEY (setting_owner),
+   FOREIGN KEY (setting_owner) REFERENCES Account(id)
 );
 
 CREATE TABLE Session (
-   session_id   INT         NOT NULL,
-   token        TEXT        NOT NULL,
-   expiry       TIMESTAMP   NOT NULL,
+   session_owner   INT         NOT NULL,
+   token           TEXT        NOT NULL,
+   expiry          TIMESTAMP   NOT NULL,
 
    PRIMARY KEY (token),
-   FOREIGN KEY (session_id) REFERENCES Account(id)
+   FOREIGN KEY (session_owner) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -94,16 +94,16 @@ CREATE TABLE Party (
 );
 
 CREATE TABLE Attendance (
-   party     INT,
-   guest     INT,
-   seen      TIMESTAMP   DEFAULT NULL,
-   rsvp      RSVP        DEFAULT 'yes' NOT NULL,
-   paid      REAL        DEFAULT 0     NOT NULL,
-   qr_code   TEXT        DEFAULT NULL,  -- svg for qr code
+   party_id   INT,
+   guest_id   INT,
+   seen       TIMESTAMP   DEFAULT NULL,
+   rsvp       RSVP        DEFAULT 'yes' NOT NULL,
+   paid       REAL        DEFAULT 0     NOT NULL,
+   qr_code    TEXT        DEFAULT NULL, -- svg for qr code
 
-   PRIMARY KEY (party, guest),
-   FOREIGN KEY (party) REFERENCES Party(id),
-   FOREIGN KEY (guest) REFERENCES Account(id)
+   PRIMARY KEY (party_id, guest_id),
+   FOREIGN KEY (party_id) REFERENCES Party(id),
+   FOREIGN KEY (guest_id) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————

@@ -8,83 +8,83 @@ datasource db {
 }
 
 model account {
-  id                               Int          @id @default(autoincrement())
-  name                             String
-  email                            String       @unique @db.VarChar(255)
-  phone                            String?      @unique @db.VarChar(64)
-  hash                             String
-  about                            String?
-  created                          DateTime     @default(now()) @db.Timestamp(6)
-  updated                          DateTime     @default(now()) @db.Timestamp(6)
-  seen                             DateTime     @default(now()) @db.Timestamp(6)
-  delete_by                        DateTime?    @default(dbgenerated("(now() + '30 days'::interval)")) @db.Timestamp(6)
-  attendance                       attendance[]
-  party                            party[]
-  profile_profile_accountToaccount profile?     @relation("profile_accountToaccount")
-  session_session_accountToaccount session[]    @relation("session_accountToaccount")
-  settings                         settings?
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique @db.VarChar(255)
+  phone      String?      @unique @db.VarChar(64)
+  hash       String
+  about      String?
+  created    DateTime     @default(now()) @db.Timestamp(6)
+  updated    DateTime     @default(now()) @db.Timestamp(6)
+  seen       DateTime     @default(now()) @db.Timestamp(6)
+  delete_by  DateTime?    @default(dbgenerated("(now() + '30 days'::interval)")) @db.Timestamp(6)
+  attendance attendance[]
+  party      party[]
+  profile    profile?
+  session    session[]
+  setting    setting?
 }
 
 model party {
-  id                                 Int          @id @default(autoincrement())
-  party_name                         String
-  banner                             String?      @db.VarChar(255)
-  host                               Int
-  chat_id                            String?
-  created                            DateTime     @default(now()) @db.Timestamp(6)
-  time_start                         DateTime     @db.Timestamp(6)
-  time_end                           DateTime?    @db.Timestamp(6)
-  is_waitlist                        Boolean      @default(false)
-  party_size                         Int?
-  price                              Int          @default(0)
-  is_private                         Boolean      @default(false)
-  is_deleted                         Boolean      @default(false)
-  widgets                            Json?
-  state                              String
-  city                               String
-  zip                                String
-  street                             String
-  unit                               String?
-  longitude                          Float        @db.Real
-  latitude                           Float        @db.Real
-  attendance_attendance_partyToparty attendance[] @relation("attendance_partyToparty")
-  account                            account      @relation(fields: [host], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          Int          @id @default(autoincrement())
+  party_name  String
+  banner      String?      @db.VarChar(255)
+  host        Int
+  chat_id     String?
+  created     DateTime     @default(now()) @db.Timestamp(6)
+  time_start  DateTime     @db.Timestamp(6)
+  time_end    DateTime?    @db.Timestamp(6)
+  is_waitlist Boolean      @default(false)
+  party_size  Int?
+  price       Int          @default(0)
+  is_private  Boolean      @default(false)
+  is_deleted  Boolean      @default(false)
+  widgets     Json?
+  state       String
+  city        String
+  zip         String
+  street      String
+  unit        String?
+  longitude   Float        @db.Real
+  latitude    Float        @db.Real
+  attendance  attendance[]
+  account     account      @relation(fields: [host], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model session {
-  account                          Int
-  token                            String   @id
-  expiry                           DateTime @db.Timestamp(6)
-  account_session_accountToaccount account  @relation("session_accountToaccount", fields: [account], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model settings {
-  account_id Int     @id
-  is_host    Boolean @default(false)
-  account    account @relation(fields: [account_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  session_id Int
+  token      String   @id
+  expiry     DateTime @db.Timestamp(6)
+  account    account  @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model attendance {
-  party                         Int
-  guest                         Int
-  seen                          DateTime? @db.Timestamp(6)
-  rsvp                          rsvp      @default(yes)
-  paid                          Float     @default(0) @db.Real
-  qr_code                       String?
-  account                       account   @relation(fields: [guest], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  party_attendance_partyToparty party     @relation("attendance_partyToparty", fields: [party], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  party_id Int
+  guest_id Int
+  seen     DateTime? @db.Timestamp(6)
+  rsvp     rsvp      @default(yes)
+  paid     Float     @default(0) @db.Real
+  qr_code  String?
+  account  account   @relation(fields: [guest_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  party    party     @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([party, guest])
+  @@id([party_id, guest_id])
 }
 
 model profile {
-  account                          Int     @id
-  about                            String?
-  twitter                          String? @db.VarChar(255)
-  facebook                         String? @db.VarChar(255)
-  instagram                        String? @db.VarChar(255)
-  website                          String? @db.VarChar(255)
-  account_profile_accountToaccount account @relation("profile_accountToaccount", fields: [account], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profile_id Int     @id
+  about      String?
+  twitter    String? @db.VarChar(255)
+  facebook   String? @db.VarChar(255)
+  instagram  String? @db.VarChar(255)
+  website    String? @db.VarChar(255)
+  account    account @relation(fields: [profile_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model setting {
+  setting_id Int     @id
+  is_host    Boolean @default(false)
+  account    account @relation(fields: [setting_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum rsvp {
