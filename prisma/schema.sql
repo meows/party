@@ -23,7 +23,7 @@ CREATE TABLE Account (
    email       Email       UNIQUE NOT NULL,
    phone       Phone       UNIQUE,
    hash        TEXT        NOT NULL,
-   about       TEXT,
+   about       TEXT        DEFAULT NULL,
    created     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    updated     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
    seen        TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
