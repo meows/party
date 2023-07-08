@@ -1,4 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { TRPCClientError } from "@trpc/client";
+import { TRPCError } from "@trpc/server";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -74,3 +76,19 @@ export const getServerAuthSession = (ctx: {
 }) => {
   return getServerSession(ctx.req, ctx.res, authOptions);
 };
+
+async function validateUser(id:number, token:string) {
+  return await prisma.session.findMany({
+    where: {
+      token,
+      account: id,
+    },
+  }).catch(
+    message => {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message,
+     })
+    }
+  )
+}
