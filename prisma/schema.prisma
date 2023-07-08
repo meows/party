@@ -52,10 +52,10 @@ model party {
 }
 
 model session {
-  session_id Int
-  token      String   @id
-  expiry     DateTime @db.Timestamp(6)
-  account    account  @relation(fields: [session_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  session_owner Int
+  token         String   @id
+  expiry        DateTime @db.Timestamp(6)
+  account       account  @relation(fields: [session_owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model attendance {
@@ -72,19 +72,19 @@ model attendance {
 }
 
 model profile {
-  profile_id Int     @id
-  about      String?
-  twitter    String? @db.VarChar(255)
-  facebook   String? @db.VarChar(255)
-  instagram  String? @db.VarChar(255)
-  website    String? @db.VarChar(255)
-  account    account @relation(fields: [profile_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profile_owner Int     @id
+  about         String?
+  twitter       String? @db.VarChar(255)
+  facebook      String? @db.VarChar(255)
+  instagram     String? @db.VarChar(255)
+  website       String? @db.VarChar(255)
+  account       account @relation(fields: [profile_owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model setting {
-  setting_id Int     @id
-  is_host    Boolean @default(false)
-  account    account @relation(fields: [setting_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  setting_owner Int     @id
+  is_host       Boolean @default(false)
+  account       account @relation(fields: [setting_owner], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum rsvp {

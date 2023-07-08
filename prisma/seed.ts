@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, party, attendance } from "@prisma/client"
 const db = new PrismaClient()
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -51,8 +51,8 @@ const parties = [
    {
       id: 1,
       party_name: "Hack Night Party",
-      banner_image: "/party/banner.jpg",
-      host_id: 2,
+      banner: "/party/banner.jpg",
+      host: 2,
       time_start: new Date(),
       state: "CA",
       city: "San Francisco",
@@ -61,14 +61,12 @@ const parties = [
       unit: "Apt 1",
       longitude: 37.7749,
       latitude: -122.4194,
-      plus_code: "849VQH8R+R9",
-      widgets: JSON.stringify({}),
    },
    {
       id: 2,
       party_name: "Generative AI Party",
-      banner_image: "/party/banner.jpg",
-      host_id: 5,
+      banner: "/party/banner.jpg",
+      host: 5,
       time_start: new Date(),
       state: "CA",
       city: "Los Angeles",
@@ -76,19 +74,17 @@ const parties = [
       street: "2 Fake Street",
       longitude: 34.0522,
       latitude: -118.2437,
-      plus_code: "849VQH8R+R9",
-      widgets: JSON.stringify({}),
    }
 ]
 
 const attendance = [
-   { party: 1, guest: 1, },
-   { party: 1, guest: 2, },
-   { party: 1, guest: 4, },
-   { party: 2, guest: 1, },
-   { party: 2, guest: 2, },
-   { party: 2, guest: 3, },
-   { party: 2, guest: 4, },
+   { party_id: 1, guest_id: 1, },
+   { party_id: 1, guest_id: 2, },
+   { party_id: 1, guest_id: 4, },
+   { party_id: 2, guest_id: 1, },
+   { party_id: 2, guest_id: 2, },
+   { party_id: 2, guest_id: 3, },
+   { party_id: 2, guest_id: 4, },
 ]
 
 // —————————————————————————————————————————————————————————————————————————————
