@@ -75,8 +75,8 @@ CREATE TABLE Party (
    time_start    TIMESTAMP   NOT NULL,
    time_end      TIMESTAMP   DEFAULT NULL,
    is_waitlist   BOOLEAN     DEFAULT FALSE NOT NULL,
-   party_size    INT         DEFAULT NULL,  -- null = infinite
-   price         INT         DEFAULT 0 NOT NULL,
+   party_size    INT         DEFAULT NULL, -- null means infinite
+   price         INT         DEFAULT 0     NOT NULL,
    is_private    BOOLEAN     DEFAULT FALSE NOT NULL,
    is_deleted    BOOLEAN     DEFAULT FALSE NOT NULL,
    widgets       JSONB       DEFAULT NULL,
@@ -87,7 +87,6 @@ CREATE TABLE Party (
    unit          TEXT        DEFAULT NULL,
    longitude     REAL        NOT NULL,
    latitude      REAL        NOT NULL,
-   plus_code     TEXT        DEFAULT NULL,
 
    PRIMARY KEY (id),
    FOREIGN KEY (host_id) REFERENCES Account(id)
@@ -97,8 +96,8 @@ CREATE TABLE Attendance (
    party     INT,
    guest     INT,
    seen      TIMESTAMP   DEFAULT NULL,
-   rsvp      RSVP        DEFAULT 'attending' NOT NULL,
-   paid      REAL        DEFAULT 0 NOT NULL,
+   rsvp      RSVP        DEFAULT 'yes' NOT NULL,
+   paid      REAL        DEFAULT 0     NOT NULL,
    qr_code   TEXT        DEFAULT NULL,  -- svg for qr code
 
    PRIMARY KEY (party, guest),
