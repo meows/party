@@ -53,9 +53,9 @@ CREATE TABLE Settings (
 );
 
 CREATE TABLE Session (
-   account   INT            NOT NULL,
-   token     VARCHAR(255),
-   expiry    TIMESTAMP      NOT NULL,
+   account   INT         NOT NULL,
+   token     TEXT        NOT NULL,
+   expiry    TIMESTAMP   NOT NULL,
 
    PRIMARY KEY (token),
    FOREIGN KEY (account) REFERENCES Account(id)
@@ -68,17 +68,17 @@ CREATE TABLE Session (
 -- is_deleted completely hides the party, but saved for bill record reasons
 CREATE TABLE Party (
    id            SERIAL,
-   party_name    VARCHAR(255)   NOT NULL,
+   party_name    TEXT        NOT NULL,
    banner        Link,
-   chat_id       VARCHAR(255),
-   created       TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   time_start    TIMESTAMP      NOT NULL,
-   time_end      TIMESTAMP      DEFAULT NULL,
-   is_waitlist   BOOLEAN        DEFAULT FALSE NOT NULL,
-   party_size    INT            DEFAULT NULL,  -- null = infinite
-   price         INT            DEFAULT 0 NOT NULL,
-   is_private    BOOLEAN        DEFAULT FALSE NOT NULL,
-   is_deleted    BOOLEAN        DEFAULT FALSE NOT NULL,
+   chat_id       TEXT,
+   created       TIMESTAMP   DEFAULT NOW() NOT NULL,
+   time_start    TIMESTAMP   NOT NULL,
+   time_end      TIMESTAMP   DEFAULT NULL,
+   is_waitlist   BOOLEAN     DEFAULT FALSE NOT NULL,
+   party_size    INT         DEFAULT NULL,  -- null = infinite
+   price         INT         DEFAULT 0 NOT NULL,
+   is_private    BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_deleted    BOOLEAN     DEFAULT FALSE NOT NULL,
    widgets       JSONB,
 
    state          VARCHAR(255)   NOT NULL,
