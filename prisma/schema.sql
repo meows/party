@@ -70,7 +70,6 @@ CREATE TABLE Party (
    id             SERIAL,
    party_name     VARCHAR(255)   NOT NULL,
    banner_image   Link,
-   host_id        INT            NOT NULL,
    chat_id        VARCHAR(255),
    created        TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
    time_start     TIMESTAMP      NOT NULL,

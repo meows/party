@@ -42,25 +42,50 @@ export const partyRouter = createTRPCRouter({
             })
       }),
 
-   makeParty: protectedProcedure
+      makeParty: protectedProcedure
       .input(z.object({
-         name: z.string(),
-         host: z.number(),
-         hostid: z.number(),
-         chatid: z.string(),
-         bannerimage: z.any().refine(
+         party_name: z.string(),
+         host_id: z.number(),
+         banner_image: z.any().refine(
             (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             "Error: only .jpeg, .jpg, and .png types are accepted"
-         ),
-      }))
-      .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.party.create({
-            data: {
-               party_name: input.name,
-               host_id: input.host,
-
-            },
-         })
+            ),
+            time_start: z.string(),
+            time_end: z.string().optional(),
+            is_waitlist: z.boolean(),
+            // unknown since it is a string in the form of json?
+            widgets: z.string().optional(),
+            state: z.string(),
+            city: z.string(),
+            zip: z.string(),
+            street: z.string(),
+            unit: z.string().optional(),
+            longitude: z.number(),
+            latitude: z.number(),
+            plus_code: z.string().optional(),
+         }))
+         .query(async ({ ctx, input }) => {
+            const result = await ctx.prisma.party.create({
+               data: {
+                  party_name: input.party_name,
+                  host_id: input.host_id,
+                  time_start: input.time_start,
+                  // Pass `time_end` if provided, otherwise `undefined`
+                  time_end: input.time_end ?? undefined,
+                  is_waitlist: input.is_waitlist,
+                  // Pass `widgets` if provided, otherwise `undefined`
+                  widgets: input.widgets && undefined,
+                  state: input.state,
+                  city: input.city,
+                  zip: input.zip,
+                  street: input.street,
+                  unit: input.unit && undefined,
+                  longitude: input.longitude,
+                  latitude: input.latitude,
+                  plus_code: input.plus_code && undefined,
+                  
+               },
+            })
 
          return {
             party: result,
@@ -75,38 +100,12 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
-            where: {
-               id: input.id,
-            },
-            data: {
-               name: input.name,
-            },
-         })
-
-         return {
-            party: result,
-         }
-      }),
-
-   editPartyHost: protectedProcedure
-      .input(
-         z.object({
-            id: z.number(),
-            host: z.number(),
-            hostid: z.number(),
-            chatid: z.string(),
-         })
-      )
-      .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
             data: {
-               host: input.host,
-               hostid: input.hostid,
-               chatid: input.chatid,
+               party_name: input.name,
             },
          })
 
@@ -115,11 +114,37 @@ export const partyRouter = createTRPCRouter({
          }
       }),
 
+   // editPartyHost: protectedProcedure
+   //    .input(
+   //       z.object({
+   //          id: z.number(),
+   //          host: z.number(),
+   //          hostid: z.number(),
+   //          chatid: z.string(),
+   //       })
+   //    )
+   //    .query(async ({ ctx, input }) => {
+   //       const result = await ctx.prisma.party.update({
+   //          where: {
+   //             id: input.id,
+   //          },
+   //          data: {
+   //             host: input.host,
+   //             hostid: input.hostid,
+   //             chatid: input.chatid,
+   //          },
+   //       })
+
+   //       return {
+   //          party: result,
+   //       }
+   //    }),
+
    editPartyImage: protectedProcedure
       .input(
          z.object({
             id: z.number(),
-            bannerimage: z
+            banner_image: z
                .any()
                .refine(
                   (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
@@ -128,12 +153,12 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
             data: {
-               bannerimage: input.bannerimage,
+               banner_image: input.banner_image,
             },
          })
 
@@ -157,7 +182,7 @@ export const partyRouter = createTRPCRouter({
       }),
 
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.parties.findMany();
+    return ctx.prisma.party.findMany();
   }),
 
 
