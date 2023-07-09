@@ -111,3 +111,4 @@ CREATE TABLE Attendance (
 
 CREATE INDEX idx_party_time_start ON Party (time_start) WHERE NOT is_deleted;
 CREATE INDEX idx_party_time_end   ON Party (time_end)   WHERE NOT is_deleted;
+CREATE INDEX idx_attendance_guest ON Attendance (guest_id);
