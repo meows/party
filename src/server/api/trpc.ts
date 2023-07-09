@@ -124,11 +124,12 @@ export const publicProcedure = t.procedure
 //   });
 // });
 
-const enforceAuth = t.middleware(({ ctx, next }) => {
+const enforceAuth = t.middleware(async ({ ctx, next }) => {
    const account = ctx.req.cookies.account ?? ""
    const token = ctx.req.cookies.token ?? ""
    if (!account || !token) throw new TRPCError({ code: "UNAUTHORIZED" })
-
+   const session = ctx.prisma.sessions.findUnique({ where: { token } })
+   if (!session) throw new TRPCError({ code: "UNAUTHORIZED" })
    return next({
       ctx: {
          session: { account, token },
@@ -145,4 +146,4 @@ const enforceAuth = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 // export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
-export const protectedProcedure = t.procedure
+export const protectedProcedure = t.procedure.use(enforceAuth)
