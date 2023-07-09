@@ -9,7 +9,7 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party
-            .findMany({ where: { host_id: input, } })
+            .findMany({ where: { host: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
@@ -22,7 +22,7 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.attendance
-            .findMany({ where: { guest: input, } })
+            .findMany({ where: { guest_id: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
@@ -60,7 +60,7 @@ export const partyRouter = createTRPCRouter({
          const result = await ctx.prisma.party.create({
             data: {
                party_name: input.name,
-               host_id: input.host,
+               host: input.host,
 
             },
          })
@@ -78,7 +78,7 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
