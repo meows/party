@@ -13,3 +13,8 @@ type SortDateRange = "Any Day"
     | "Upcoming Week"
     | "Upcoming Weekend"
     | "Custom"
+
+type Cookie = {
+    user: string
+    token: string
+}
