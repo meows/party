@@ -131,12 +131,12 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
             data: {
-               bannerimage: input.bannerimage,
+               banner: input.bannerimage,
             },
          })
 
