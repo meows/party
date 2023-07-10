@@ -42,7 +42,7 @@ export const partyRouter = createTRPCRouter({
             })
       }),
 
-      makeParty: protectedProcedure
+   makeParty: protectedProcedure
       .input(z.object({
          party_name: z.string(),
          host_id: z.number(),
@@ -50,19 +50,19 @@ export const partyRouter = createTRPCRouter({
             (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             "Error: only .jpeg, .jpg, and .png types are accepted"
             ),
-            time_start: z.string(),
-            time_end: z.string().optional(),
-            is_waitlist: z.boolean(),
-            // unknown since it is a string in the form of json?
-            widgets: z.string().optional(),
-            state: z.string(),
-            city: z.string(),
-            zip: z.string(),
-            street: z.string(),
-            unit: z.string().optional(),
-            longitude: z.number(),
-            latitude: z.number(),
-            plus_code: z.string().optional(),
+         time_start: z.string(),
+         time_end: z.string().optional(),
+         is_waitlist: z.boolean(),
+         // unknown since it is a string in the form of json?
+         widgets: z.string().optional(),
+         state: z.string(),
+         city: z.string(),
+         zip: z.string(),
+         street: z.string(),
+         unit: z.string().optional(),
+         longitude: z.number(),
+         latitude: z.number(),
+         plus_code: z.string().optional(),
          }))
          .query(async ({ ctx, input }) => {
             const result = await ctx.prisma.party.create({
