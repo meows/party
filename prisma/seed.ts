@@ -1,4 +1,4 @@
-import { PrismaClient, party, attendance } from "@prisma/client"
+import { PrismaClient, party, attendance, session } from "@prisma/client"
 const db = new PrismaClient()
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -87,6 +87,14 @@ const attendance = [
    { party_id: 2, guest_id: 4, },
 ]
 
+const sessions:session[] = [
+   {
+      session_owner: 1,
+      expiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      token: "token",
+   }
+]
+
 // —————————————————————————————————————————————————————————————————————————————
 // Execute Query
 
@@ -96,6 +104,7 @@ async function main() {
       db.account.createMany({ data: accounts }),
       db.party.createMany({ data: parties }),
       db.attendance.createMany({ data: attendance }),
+      db.session.createMany({ data: sessions }),
    ]).catch(err => console.log("Seed error: ", err))
 }
 
