@@ -1,4 +1,4 @@
-import { PrismaClient, party, attendance, session } from "@prisma/client"
+import { PrismaClient, attendance, session } from "@prisma/client"
 const db = new PrismaClient()
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -90,7 +90,7 @@ const attendance = [
 const sessions:session[] = [
    {
       session_owner: 1,
-      expiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       token: "token",
    }
 ]
