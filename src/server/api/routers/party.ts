@@ -49,9 +49,8 @@ export const partyRouter = createTRPCRouter({
       .input(z.object({
          name: z.string(),
          host: z.number(),
-         hostid: z.number(),
-         chatid: z.string(),
-         bannerimage: z.any().refine(
+         chat_id: z.string(),
+         banner: z.any().refine(
             (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             "Error: only .jpeg, .jpg, and .png types are accepted"
          ),

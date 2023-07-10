@@ -15,6 +15,6 @@ type SortDateRange = "Any Day"
     | "Custom"
 
 type Cookie = {
-    user: string
-    token: string
+   user: string
+   token: string
 }
