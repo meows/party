@@ -26,29 +26,30 @@ model account {
 }
 
 model party {
-  id          Int          @id @default(autoincrement())
-  party_name  String
-  banner      String?      @db.VarChar(255)
-  host        Int
-  chat_id     String?
-  created     DateTime     @default(now()) @db.Timestamp(6)
-  time_start  DateTime     @db.Timestamp(6)
-  time_end    DateTime?    @db.Timestamp(6)
-  is_waitlist Boolean      @default(false)
-  party_size  Int?
-  price       Int          @default(0)
-  is_private  Boolean      @default(false)
-  is_deleted  Boolean      @default(false)
-  widgets     Json?
-  state       String
-  city        String
-  zip         String
-  street      String
-  unit        String?
-  longitude   Float        @db.Real
-  latitude    Float        @db.Real
-  attendance  attendance[]
-  account     account      @relation(fields: [host], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id           Int          @id @default(autoincrement())
+  party_name   String
+  banner       String?      @db.VarChar(255)
+  host         Int
+  chat_id      String?
+  created      DateTime     @default(now()) @db.Timestamp(6)
+  time_start   DateTime     @db.Timestamp(6)
+  time_end     DateTime?    @db.Timestamp(6)
+  is_waitlist  Boolean      @default(false)
+  party_size   Int?
+  price        Int          @default(0)
+  is_private   Boolean      @default(false)
+  is_deleted   Boolean      @default(false)
+  is_published Boolean      @default(false)
+  widgets      Json?
+  state        String
+  city         String
+  zip          String
+  street       String
+  unit         String?
+  longitude    Float        @db.Real
+  latitude     Float        @db.Real
+  attendance   attendance[]
+  account      account      @relation(fields: [host], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model session {
