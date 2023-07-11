@@ -14,7 +14,7 @@ const PartyCard: React.FC<PartyCardProps> = ({party}) => {
         <div className='party_card'>
             <div className='flex justify-between items-start gap-5'>
                 <Image
-                    src={party.banner_image ?? ""}
+                    src={party.banner ?? ""}
                     alt="party_banner"
                     width={40}
                     height={40}
@@ -24,7 +24,7 @@ const PartyCard: React.FC<PartyCardProps> = ({party}) => {
             </div>
             <div className='flex flex-col'>
                 {/* need to first fetch the account tables to get the host's name */}
-                <h3>{party.host_id}</h3>
+                <h3>{party.host}</h3>
                 <p>{party.party_name}</p>
             </div>
         </div>

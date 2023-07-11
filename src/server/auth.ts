@@ -81,7 +81,7 @@ async function validateUser(id:number, token:string) {
   return await prisma.session.findMany({
     where: {
       token,
-      account: id,
+      session_owner: id,
     },
   }).catch(
     message => {

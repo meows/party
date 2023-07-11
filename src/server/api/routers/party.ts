@@ -9,7 +9,7 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party
-            .findMany({ where: { host_id: input, } })
+            .findMany({ where: { host: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
@@ -49,16 +49,17 @@ export const partyRouter = createTRPCRouter({
       .input(z.object({
          name: z.string(),
          host: z.number(),
-         chat_id: z.string(),
-         banner: z.any().refine(
-            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-            "Error: only .jpeg, .jpg, and .png types are accepted"
-            ),
+         banner: z.string(),
+         // banner: z.any().refine(
+            //    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            //    "Error: only .jpeg, .jpg, and .png types are accepted"
+            //    ),
          time_start: z.string(),
          time_end: z.string().optional(),
          is_waitlist: z.boolean(),
          // unknown since it is a string in the form of json?
          widgets: z.string().optional(),
+         chat_id: z.string().optional(),
          state: z.string(),
          city: z.string(),
          zip: z.string(),
@@ -66,13 +67,12 @@ export const partyRouter = createTRPCRouter({
          unit: z.string().optional(),
          longitude: z.number(),
          latitude: z.number(),
-         plus_code: z.string().optional(),
          }))
-         .query(async ({ ctx, input }) => {
+         .mutation(async ({ ctx, input }) => {
             const result = await ctx.prisma.party.create({
                data: {
                   party_name: input.name,
-                  host_id: input.host,
+                  host: input.host,
                   time_start: input.time_start,
                   // Pass `time_end` if provided, otherwise `undefined`
                   time_end: input.time_end ?? undefined,
@@ -86,7 +86,6 @@ export const partyRouter = createTRPCRouter({
                   unit: input.unit && undefined,
                   longitude: input.longitude,
                   latitude: input.latitude,
-                  plus_code: input.plus_code && undefined,
                },
             })
 
@@ -117,61 +116,11 @@ export const partyRouter = createTRPCRouter({
          }
       }),
 
-   editPartyHost: protectedProcedure
-      .input(
-         z.object({
-            id: z.number(),
-            host: z.number(),
-            hostid: z.number(),
-            chatid: z.string(),
-         })
-      )
-      .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.party.update({
-            where: {
-               id: input.id,
-            },
-            data: {
-               party_name: input.name,
-            },
-         })
-
-         return {
-            party: result,
-         }
-      }),
-
-   // editPartyHost: protectedProcedure
-   //    .input(
-   //       z.object({
-   //          id: z.number(),
-   //          host: z.number(),
-   //          hostid: z.number(),
-   //          chatid: z.string(),
-   //       })
-   //    )
-   //    .query(async ({ ctx, input }) => {
-   //       const result = await ctx.prisma.party.update({
-   //          where: {
-   //             id: input.id,
-   //          },
-   //          data: {
-   //             host: input.host,
-   //             hostid: input.hostid,
-   //             chatid: input.chatid,
-   //          },
-   //       })
-
-   //       return {
-   //          party: result,
-   //       }
-   //    }),
-
    editPartyImage: protectedProcedure
       .input(
          z.object({
             id: z.number(),
-            banner_image: z
+            banner: z
                .any()
                .refine(
                   (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
@@ -185,7 +134,7 @@ export const partyRouter = createTRPCRouter({
                id: input.id,
             },
             data: {
-               bannerimage: input.bannerimage,
+               banner: input.banner,
             },
          })
 

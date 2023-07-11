@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/Input'
 import { useMutation } from '@tanstack/react-query'
 import { api } from "~/utils/api";
-import { Button } from '@/components/ui/Button'
+import { Input } from 'shadcn/components/ui/input';
+import { Button } from 'shadcn/components/ui/button';
 
 interface FormData {
-    party_name: string;
-    host_id: number;
-    banner_image: File | null;
+    name: string;
+    banner: string;
+    host: number;
     time_start: string;
     time_end?: string;
     is_waitlist: boolean;
@@ -20,16 +20,14 @@ interface FormData {
     unit?: string;
     longitude: number;
     latitude: number;
-    plus_code?: string;
-  }
+}
 
 const CreateEventPage = () => {
-    const [inputPartyName, setInputPartyName] = useState<string>('www.xyzparty.com/party/')
     const router = useRouter()
     const [formData, setFormData] = useState<FormData>({
-        party_name: '',
-        host_id: 0,
-        banner_image: null,
+        name: '',
+        host: 0,
+        banner: "",
         time_start: '',
         time_end: '',
         is_waitlist: false,
@@ -41,36 +39,8 @@ const CreateEventPage = () => {
         unit: '',
         longitude: 0,
         latitude: 0,
-        plus_code: '',
       });
-
-    // const makePartyQuery = api.party.makeParty.useQuery({ formData });
-
-    // Destructure mutate from useMutation and call it createAParty
-    const { mutate: createAParty, isLoading } = useMutation({
-        // mutationFn is any function that handles our data fetching logic.
-        // This could be just a fetch request.
-        mutationFn: async () => {
-            // Is user logged out? If so, redirect to log in?
-            
-
-            // const data = api.party.makeParty.useQuery({ formData })
-            const response = await fetch('api/routers/party/makeParty', {
-                method: 'Post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-
-            if (response.ok) {
-                const data = await response.json()
-            } else {
-                // Handle error response
-            }
-            // return data as string
-        },
-    })
+    const query = api.party.makeParty.useMutation()
 
     return (
         // TODO: Add the navbar somehow.
@@ -87,20 +57,23 @@ const CreateEventPage = () => {
                     </p>
                 </div>
                 <div className='relative'>
-                    <Input 
+                    <Input
                         className='p1-6' //onClick={() => router.back()}
-                        value={inputPartyName}
-                        onChange={(e) => setInputPartyName(e.target.value)}
+                        placeholder='www.xyzparty.com/party/'
+                        value={formData.name}
+                        onChange={(e) => setFormData((prev) => ({
+                            ...prev,
+                            [formData.name]: e.target.value,
+                        }))}
                     />
                 </div>
             </div>
             <div className='flex justify-end gap-4'>
                 <Button
-                    disabled={inputPartyName.length == 0}
-                    onClick={() => createAParty()}>
-                    {isLoading ? 'Submitting Party...' : 'Publish Party'}
+                    disabled={formData.name.length == 0}
+                    onClick={() => query.mutate(formData)}>
+                    {query.isLoading ? 'Submitting Party...' : 'Publish Party'}
                 </Button>
-
             </div>
         </div>
     )
