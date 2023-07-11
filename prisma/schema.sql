@@ -8,7 +8,7 @@ SET search_path TO party;
 -- —————————————————————————————————————————————————————————————————————————————
 -- Types
 
-CREATE TYPE     RSVP    AS ENUM ('attending', 'waitlist');
+CREATE TYPE     RSVP    AS ENUM ('yes', 'no', 'maybe', 'waitlist');
 CREATE DOMAIN   Email   VARCHAR(255);
 CREATE DOMAIN   Phone   VARCHAR(64);
 CREATE DOMAIN   Name    VARCHAR(64);
@@ -23,42 +23,42 @@ CREATE TABLE Account (
    email       Email       UNIQUE NOT NULL,
    phone       Phone       UNIQUE,
    hash        TEXT        NOT NULL,
-   about       TEXT,
-   created     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   updated     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   seen        TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   delete_by   TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days'),
+   about       TEXT        DEFAULT NULL,
+   created     TIMESTAMP   DEFAULT NOW() NOT NULL,
+   updated     TIMESTAMP   DEFAULT NOW() NOT NULL,
+   seen        TIMESTAMP   DEFAULT NOW() NOT NULL,
+   delete_by   TIMESTAMP   DEFAULT (NOW() + INTERVAL '30 days'),
 
    PRIMARY KEY (id)
 );
 
 CREATE TABLE Profile (
-   account     INT,
-   about       TEXT   DEFAULT NULL,
-   twitter     Link   DEFAULT NULL,
-   facebook    Link   DEFAULT NULL,
-   instagram   Link   DEFAULT NULL,
-   website     Link   DEFAULT NULL,
+   profile_owner   INT,
+   about           TEXT   DEFAULT NULL,
+   twitter         Link   DEFAULT NULL,
+   facebook        Link   DEFAULT NULL,
+   instagram       Link   DEFAULT NULL,
+   website         Link   DEFAULT NULL,
 
-   PRIMARY KEY (account),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   PRIMARY KEY (profile_owner),
+   FOREIGN KEY (profile_owner) REFERENCES Account(id)
 )
 
-CREATE TABLE Settings (
-   account   INT,
-   is_host   BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
+CREATE TABLE Setting (
+   setting_owner   INT,
+   is_host         BOOLEAN   DEFAULT FALSE NOT NULL,  -- host-based GUI switch
 
-   PRIMARY KEY (account),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   PRIMARY KEY (setting_owner),
+   FOREIGN KEY (setting_owner) REFERENCES Account(id)
 );
 
 CREATE TABLE Session (
-   account   INT            NOT NULL,
-   token     VARCHAR(255),
-   expiry    TIMESTAMP      NOT NULL,
+   session_owner   INT         NOT NULL,
+   token           TEXT        NOT NULL,
+   expiry          TIMESTAMP   NOT NULL,
 
    PRIMARY KEY (token),
-   FOREIGN KEY (account) REFERENCES Account(id)
+   FOREIGN KEY (session_owner) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -68,43 +68,43 @@ CREATE TABLE Session (
 -- is_deleted completely hides the party, but saved for bill record reasons
 CREATE TABLE Party (
    id             SERIAL,
-   party_name     VARCHAR(255)   NOT NULL,
-   banner_image   Link,
-   chat_id        VARCHAR(255),
-   created        TIMESTAMP      DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   time_start     TIMESTAMP      NOT NULL,
-   time_end       TIMESTAMP,
-   is_waitlist    BOOLEAN        DEFAULT FALSE NOT NULL,
-   party_size     INT            DEFAULT 1000000 NOT NULL,
-   price          INT            DEFAULT 0 NOT NULL,
-   is_private     BOOLEAN        DEFAULT FALSE NOT NULL,
-   is_deleted     BOOLEAN        DEFAULT FALSE NOT NULL,
-   widgets        JSONB,
-
-   state          VARCHAR(255)   NOT NULL,
-   city           VARCHAR(255)   NOT NULL,
-   zip            VARCHAR(255)   NOT NULL,
-   street         VARCHAR(255)   NOT NULL,
-   unit           VARCHAR(255),
-   longitude      REAL           NOT NULL,
-   latitude       REAL           NOT NULL,
-   plus_code      VARCHAR(255),
+   party_name     TEXT        NOT NULL,
+   banner         Link        DEFAULT NULL,
+   host           INT         NOT NULL,
+   chat_id        TEXT        DEFAULT NULL,
+   created        TIMESTAMP   DEFAULT NOW() NOT NULL,
+   time_start     TIMESTAMP   NOT NULL,
+   time_end       TIMESTAMP   DEFAULT NULL,
+   is_waitlist    BOOLEAN     DEFAULT FALSE NOT NULL,
+   party_size     INT         DEFAULT NULL, -- null means infinite
+   price          INT         DEFAULT 0     NOT NULL,
+   is_private     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_deleted     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_published   BOOLEAN     DEFAULT FALSE NOT NULL,
+   widgets        JSONB       DEFAULT NULL,
+   state          TEXT        NOT NULL,
+   city           TEXT        NOT NULL,
+   zip            TEXT        NOT NULL,
+   street         TEXT        NOT NULL,
+   unit           TEXT        DEFAULT NULL,
+   longitude      REAL        NOT NULL,
+   latitude       REAL        NOT NULL,
 
    PRIMARY KEY (id),
-   FOREIGN KEY (host_id) REFERENCES Account(id)
+   FOREIGN KEY (host) REFERENCES Account(id)
 );
 
 CREATE TABLE Attendance (
-   party     INT,
-   guest     INT,
-   seen      TIMESTAMP   DEFAULT NULL,
-   rsvp      RSVP        DEFAULT 'attending' NOT NULL,
-   paid      REAL        DEFAULT 0 NOT NULL,
-   qr_code   TEXT        DEFAULT NULL,  -- svg for qr code
+   party_id   INT,
+   guest_id   INT,
+   seen       TIMESTAMP   DEFAULT NULL,
+   rsvp       RSVP        DEFAULT 'yes' NOT NULL,
+   paid       REAL        DEFAULT 0     NOT NULL,
+   qr_code    TEXT        DEFAULT NULL, -- svg for qr code
 
-   PRIMARY KEY (party, guest),
-   FOREIGN KEY (party) REFERENCES Party(id),
-   FOREIGN KEY (guest) REFERENCES Account(id)
+   PRIMARY KEY (party_id, guest_id),
+   FOREIGN KEY (party_id) REFERENCES Party(id),
+   FOREIGN KEY (guest_id) REFERENCES Account(id)
 );
 
 -- —————————————————————————————————————————————————————————————————————————————
@@ -112,3 +112,4 @@ CREATE TABLE Attendance (
 
 CREATE INDEX idx_party_time_start ON Party (time_start) WHERE NOT is_deleted;
 CREATE INDEX idx_party_time_end   ON Party (time_end)   WHERE NOT is_deleted;
+CREATE INDEX idx_attendance_guest ON Attendance (guest_id);

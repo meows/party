@@ -9,25 +9,27 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party
-            .findMany({ where: { host_id: input, } })
+            .findMany({ where: { host: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
                   message,
                })
             })
+         return result
       }),
    getPartiesByGuest: protectedProcedure
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.attendance
-            .findMany({ where: { guest: input, } })
+            .findMany({ where: { guest_id: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
                   message,
                })
             })
+         return result
       }),
    getPartiesByCity: protectedProcedure
       .input(z.string())
@@ -40,13 +42,15 @@ export const partyRouter = createTRPCRouter({
                   message,
                })
             })
+         return result
       }),
 
    makeParty: protectedProcedure
       .input(z.object({
-         party_name: z.string(),
-         host_id: z.number(),
-         banner_image: z.any().refine(
+         name: z.string(),
+         host: z.number(),
+         chat_id: z.string(),
+         banner: z.any().refine(
             (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             "Error: only .jpeg, .jpg, and .png types are accepted"
             ),
@@ -96,6 +100,30 @@ export const partyRouter = createTRPCRouter({
          z.object({
             id: z.number(),
             name: z.string(),
+         })
+      )
+      .query(async ({ ctx, input }) => {
+         const result = await ctx.prisma.parties.update({
+            where: {
+               id: input.id,
+            },
+            data: {
+               name: input.name,
+            },
+         })
+
+         return {
+            party: result,
+         }
+      }),
+
+   editPartyHost: protectedProcedure
+      .input(
+         z.object({
+            id: z.number(),
+            host: z.number(),
+            hostid: z.number(),
+            chatid: z.string(),
          })
       )
       .query(async ({ ctx, input }) => {
@@ -157,7 +185,7 @@ export const partyRouter = createTRPCRouter({
                id: input.id,
             },
             data: {
-               banner_image: input.banner_image,
+               bannerimage: input.bannerimage,
             },
          })
 
