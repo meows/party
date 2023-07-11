@@ -67,27 +67,28 @@ CREATE TABLE Session (
 -- is_private means unlisted & location is hidden until rsvp
 -- is_deleted completely hides the party, but saved for bill record reasons
 CREATE TABLE Party (
-   id            SERIAL,
-   party_name    TEXT        NOT NULL,
-   banner        Link        DEFAULT NULL,
-   host          INT         NOT NULL,
-   chat_id       TEXT        DEFAULT NULL,
-   created       TIMESTAMP   DEFAULT NOW() NOT NULL,
-   time_start    TIMESTAMP   NOT NULL,
-   time_end      TIMESTAMP   DEFAULT NULL,
-   is_waitlist   BOOLEAN     DEFAULT FALSE NOT NULL,
-   party_size    INT         DEFAULT NULL, -- null means infinite
-   price         INT         DEFAULT 0     NOT NULL,
-   is_private    BOOLEAN     DEFAULT FALSE NOT NULL,
-   is_deleted    BOOLEAN     DEFAULT FALSE NOT NULL,
-   widgets       JSONB       DEFAULT NULL,
-   state         TEXT        NOT NULL,
-   city          TEXT        NOT NULL,
-   zip           TEXT        NOT NULL,
-   street        TEXT        NOT NULL,
-   unit          TEXT        DEFAULT NULL,
-   longitude     REAL        NOT NULL,
-   latitude      REAL        NOT NULL,
+   id             SERIAL,
+   party_name     TEXT        NOT NULL,
+   banner         Link        DEFAULT NULL,
+   host           INT         NOT NULL,
+   chat_id        TEXT        DEFAULT NULL,
+   created        TIMESTAMP   DEFAULT NOW() NOT NULL,
+   time_start     TIMESTAMP   NOT NULL,
+   time_end       TIMESTAMP   DEFAULT NULL,
+   is_waitlist    BOOLEAN     DEFAULT FALSE NOT NULL,
+   party_size     INT         DEFAULT NULL, -- null means infinite
+   price          INT         DEFAULT 0     NOT NULL,
+   is_private     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_deleted     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_published   BOOLEAN     DEFAULT FALSE NOT NULL,
+   widgets        JSONB       DEFAULT NULL,
+   state          TEXT        NOT NULL,
+   city           TEXT        NOT NULL,
+   zip            TEXT        NOT NULL,
+   street         TEXT        NOT NULL,
+   unit           TEXT        DEFAULT NULL,
+   longitude      REAL        NOT NULL,
+   latitude       REAL        NOT NULL,
 
    PRIMARY KEY (id),
    FOREIGN KEY (host) REFERENCES Account(id)
@@ -111,3 +112,4 @@ CREATE TABLE Attendance (
 
 CREATE INDEX idx_party_time_start ON Party (time_start) WHERE NOT is_deleted;
 CREATE INDEX idx_party_time_end   ON Party (time_end)   WHERE NOT is_deleted;
+CREATE INDEX idx_attendance_guest ON Attendance (guest_id);

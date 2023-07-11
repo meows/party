@@ -47,6 +47,20 @@
    ```
    npx prisma studio
    ```
+# Schema Updates
+
+If `schema.prisma` receives updates, then you can push to a connected DB with:
+
+```bash
+# update db & generate client
+npx prisma db push
+```
+
+Then run the idempotent seed script for initial dummy data:
+
+```bash
+npx prisma db seed
+```
 
 # Git Workflow
 

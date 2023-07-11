@@ -9,7 +9,7 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.party
-            .findMany({ where: { host_id: input, } })
+            .findMany({ where: { host: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
@@ -22,7 +22,7 @@ export const partyRouter = createTRPCRouter({
       .input(z.number())
       .query(async ({ ctx, input }) => {
          const result = await ctx.prisma.attendance
-            .findMany({ where: { guest: input, } })
+            .findMany({ where: { guest_id: input, } })
             .catch(message => {
                throw new TRPCError({
                   code: "INTERNAL_SERVER_ERROR",
@@ -49,9 +49,8 @@ export const partyRouter = createTRPCRouter({
       .input(z.object({
          name: z.string(),
          host: z.number(),
-         hostid: z.number(),
-         chatid: z.string(),
-         bannerimage: z.any().refine(
+         chat_id: z.string(),
+         banner: z.any().refine(
             (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
             "Error: only .jpeg, .jpg, and .png types are accepted"
          ),
@@ -60,7 +59,7 @@ export const partyRouter = createTRPCRouter({
          const result = await ctx.prisma.party.create({
             data: {
                party_name: input.name,
-               host_id: input.host,
+               host: input.host,
 
             },
          })
@@ -78,7 +77,7 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
@@ -131,12 +130,12 @@ export const partyRouter = createTRPCRouter({
          })
       )
       .query(async ({ ctx, input }) => {
-         const result = await ctx.prisma.parties.update({
+         const result = await ctx.prisma.party.update({
             where: {
                id: input.id,
             },
             data: {
-               bannerimage: input.bannerimage,
+               banner: input.bannerimage,
             },
          })
 

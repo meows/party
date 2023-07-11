@@ -69,6 +69,7 @@ model attendance {
   party    party     @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([party_id, guest_id])
+  @@index([guest_id], map: "idx_attendance_guest")
 }
 
 model profile {

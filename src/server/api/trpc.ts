@@ -7,14 +7,13 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { type Session } from "next-auth";
-import superjson from "superjson";
-import { ZodError } from "zod";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next"
+import { initTRPC, TRPCError } from "@trpc/server"
+import { NextApiRequest, NextApiResponse } from "next"
+import superjson from "superjson"
+import { ZodError } from "zod"
+import { prisma } from "~/server/db"
 // import { getServerAuthSession } from "~/server/auth";
-import { prisma } from "~/server/db";
 
 /**
  * 1. CONTEXT
@@ -25,10 +24,13 @@ import { prisma } from "~/server/db";
  */
 
 type CreateContextOptions = {
-  // session: Session | null
-  req: NextApiRequest
-  res: NextApiResponse
-};
+   session: {
+      account: string
+      token: string
+   }
+   req: NextApiRequest
+   res: NextApiResponse
+}
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
@@ -41,12 +43,12 @@ type CreateContextOptions = {
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
-  return {
-    req: opts.req,
-    res: opts.res,
-    prisma,
-  };
-};
+   return {
+      req: opts.req,
+      res: opts.res,
+      prisma,
+   }
+}
 
 /**
  * This is the actual context you will use in your router. It will be used to process every request
@@ -54,24 +56,15 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts;
-
-  // Get the session from the server using the getServerSession wrapper function
-  // const session = await getServerAuthSession({ req, res });
-
-  const { user, token } = parseCookie(req.cookies)
-  const isUserValid = await validateUser(user.id, token)
-
-  return createInnerTRPCContext({
-    session: {
-      user,
-      id,
-    },
-    req,
-    res,
-  });
-};
+export const createTRPCContext = async (opts: CreateNextContextOptions) => 
+   createInnerTRPCContext({
+      session: { 
+         account: opts.req.cookies.account ?? "",
+         token: opts.req.cookies.token ?? "",
+      },
+      req: opts.req,
+      res: opts.res,
+   })
 
 /**
  * 2. INITIALIZATION
@@ -82,18 +75,18 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  */
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+   transformer: superjson,
+   errorFormatter({ shape, error }) {
+      return {
+         ...shape,
+         data: {
+            ...shape.data,
+            zodError:
+               error.cause instanceof ZodError ? error.cause.flatten() : null,
+         },
+      }
+   },
+})
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -107,7 +100,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
  *
  * @see https://trpc.io/docs/router
  */
-export const createTRPCRouter = t.router;
+export const createTRPCRouter = t.router
 
 /**
  * Public (unauthenticated) procedure
@@ -116,7 +109,7 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 // const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
@@ -131,6 +124,19 @@ export const publicProcedure = t.procedure;
 //   });
 // });
 
+const enforceAuth = t.middleware(async ({ ctx, next }) => {
+   const account = ctx.req.cookies.account ?? ""
+   const token = ctx.req.cookies.token ?? ""
+   if (!account || !token) throw new TRPCError({ code: "UNAUTHORIZED" })
+   const session = ctx.prisma.session.findUnique({ where: { token } })
+   if (!session) throw new TRPCError({ code: "UNAUTHORIZED" })
+   return next({
+      ctx: {
+         session: { account, token },
+      },
+   })
+})
+
 /**
  * Protected (authenticated) procedure
  *
@@ -140,4 +146,4 @@ export const publicProcedure = t.procedure;
  * @see https://trpc.io/docs/procedures
  */
 // export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
-export const protectedProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(enforceAuth)
