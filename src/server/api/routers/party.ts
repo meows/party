@@ -83,7 +83,6 @@ export const partyRouter = createTRPCRouter({
                   longitude: input.longitude,
                   latitude: input.latitude,
                   plus_code: input.plus_code && undefined,
-                  
                },
             })
 

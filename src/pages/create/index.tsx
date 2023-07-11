@@ -51,8 +51,11 @@ const CreateEventPage = () => {
         // mutationFn is any function that handles our data fetching logic.
         // This could be just a fetch request.
         mutationFn: async () => {
+            // Is user logged out? If so, redirect to log in?
+            
+
             // const data = api.party.makeParty.useQuery({ formData })
-            const response = await fetch('api/party/makeParty', {
+            const response = await fetch('api/routers/party/makeParty', {
                 method: 'Post',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,7 +98,7 @@ const CreateEventPage = () => {
                 <Button
                     disabled={inputPartyName.length == 0}
                     onClick={() => createAParty()}>
-                    {isLoading ? 'Submitting...' : 'Submit'}
+                    {isLoading ? 'Submitting Party...' : 'Publish Party'}
                 </Button>
 
             </div>
