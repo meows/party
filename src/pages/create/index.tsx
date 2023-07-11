@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { api } from "~/utils/api";
-import { Input } from 'shadcn/components/ui/input';
-import { Button } from 'shadcn/components/ui/button';
+import { Input } from 'shadcn/components/ui/Input';
+import { Button } from 'shadcn/components/ui/Button';
 
 interface FormData {
     name: string;
