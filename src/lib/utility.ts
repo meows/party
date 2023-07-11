@@ -78,8 +78,8 @@ export function getCookies(cookies:string|null): Record<string, string> {
       ? cookies.split("; ")
          .map(cookie => {
             let [, k, v] = regex.exec(cookie) ?? []
-            if (v[0] === '"') v = v.slice(1, -1)
-            return [decodeURIComponent(k), decodeURIComponent(v?.trim() ?? "")]
+            if (v![0] === '"') v = v!.slice(1, -1)
+            return [decodeURIComponent(k!), decodeURIComponent(v?.trim() ?? "")]
          })
          .filter(kv => kv[0])
       : []

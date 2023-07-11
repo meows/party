@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/Input'
 import { useMutation } from '@tanstack/react-query'
 import { api } from "~/utils/api";
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 
 interface FormData {
     party_name: string;
