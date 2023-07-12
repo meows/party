@@ -56,9 +56,9 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => 
+export const createTRPCContext = async (opts: CreateNextContextOptions) =>
    createInnerTRPCContext({
-      session: { 
+      session: {
          account: opts.req.cookies.account ?? "",
          token: opts.req.cookies.token ?? "",
       },
@@ -126,6 +126,7 @@ export const publicProcedure = t.procedure
 
 const enforceAuth = t.middleware(async ({ ctx, next }) => {
    const account = ctx.req.cookies.account ?? ""
+   // const token = ctx.req.headers.authorization?.split(' ')[1]
    const token = ctx.req.cookies.token ?? ""
    if (!account || !token) throw new TRPCError({ code: "UNAUTHORIZED" })
    const session = ctx.prisma.session.findUnique({ where: { token } })

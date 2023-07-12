@@ -20,7 +20,7 @@ CREATE DOMAIN   Link    VARCHAR(255);
 CREATE TABLE Account (
    id          SERIAL,
    name        TEXT        NOT NULL,
-   email       Email       UNIQUE NOT NULL,
+   email       Email       UNIQUE,
    phone       Phone       UNIQUE,
    hash        TEXT        NOT NULL,
    about       TEXT        DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE Profile (
 
    PRIMARY KEY (profile_owner),
    FOREIGN KEY (profile_owner) REFERENCES Account(id)
-)
+);
 
 CREATE TABLE Setting (
    setting_owner   INT,
