@@ -68,20 +68,23 @@ export const authRouter = createTRPCRouter({
       }))
       .mutation(async ({ ctx, input }) => {
          const { email, password } = input
+         const account = await ctx.prisma.account.findFirst({
+            where: {
+               OR: [
+                 { email: email },
+                 { phone: email },
+               ],
+             },
+         })
+         if (!account) {
+            throw new TRPCError({
+               code: "UNAUTHORIZED",
+               message: "Invalid email.",
+               // message: "Invalid email or password.",
+            });
+         }
          if (password) {
             // const candidate = await bcrypt.hash(password, 10)
-            const account = await ctx.prisma.account.findUnique({
-               where: {
-                  email
-               },
-            })
-            if (!account) {
-               throw new TRPCError({
-                  code: "UNAUTHORIZED",
-                  message: "Invalid email.",
-                  // message: "Invalid email or password.",
-               });
-            }
             // const isPasswordValid = await bcrypt.compare(candidate, account.hash);
             const isPasswordValid = password === account.hash;
             if (!isPasswordValid) {
@@ -114,6 +117,14 @@ export const authRouter = createTRPCRouter({
             return { accessToken: token }
          } else {
             // Send verification email.
+            // User provided only email/phone, send verification link
+            if (account.email) {
+               // Send verification email
+               // await sendVerificationEmail(account.email);
+            } else if (account.phone) {
+               // Send verification SMS
+               // await sendVerificationSMS(account.phone);
+            }
             return { accessToken: ""}
          }
       }),
