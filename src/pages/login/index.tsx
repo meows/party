@@ -23,7 +23,7 @@ export default function Login() {
 
    const handelSubmit = async (e: React.SyntheticEvent) => {
       e.preventDefault()
-      const token = loginWithEmail({ email: emailOrPhone, password: password })
+      loginWithEmail({ email: emailOrPhone, password: password })
    }
 
    return (

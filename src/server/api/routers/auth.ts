@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken'
 import { env } from '~/env.mjs'
 
 // Function to generate a JWT token.
-const generateToken = (userId: string, serverJwtSecret: string): string => {
-  const token = jwt.sign({ userId }, serverJwtSecret, {
+const generateToken = (userId: string): string => {
+  const token = jwt.sign({ userId }, env.JSONWEBTOKEN_SECRET, {
     expiresIn: '1h', // Token expiration time
   });
 
@@ -94,8 +94,7 @@ export const authRouter = createTRPCRouter({
             // From here the account is good.
 
             // Generate the token.
-            const serverJwtSecret = env.JSONWEBTOKEN_SECRET
-            const token = generateToken(account.id.toString(), serverJwtSecret);
+            const token = generateToken(account.id.toString());
 
             // Set the token as a cookie
             const cookie = serialize('token', token, {
