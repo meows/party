@@ -16,6 +16,16 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
+let token: string
+
+export function setToken(newToken: string) {
+  /**
+   * You can also save the token to cookies, and initialize from
+   * cookies above.
+   */
+  token = newToken;
+}
+
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
   config() {
@@ -40,6 +50,11 @@ export const api = createTRPCNext<AppRouter>({
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
+          headers() {
+            return {
+              Authorization: `Bearer ${token}`,
+            }
+          }
         }),
       ],
     };

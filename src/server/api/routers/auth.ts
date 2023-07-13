@@ -3,19 +3,21 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/
 import { z } from "zod"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
+import { env } from '~/env.mjs'
 
-// Function to generate a JWT token
-const generateToken = (userId: string): string => {
-  const token = jwt.sign({ userId }, 'your-secret-key', {
+// Function to generate a JWT token.
+const generateToken = (userId: string, serverJwtSecret: string): string => {
+  const token = jwt.sign({ userId }, serverJwtSecret, {
     expiresIn: '1h', // Token expiration time
   });
 
   return token;
 };
-
+/*
 // Usage example
 const token = generateToken('user123');
 console.log(token);
+*/
 
 // Serialize function to convert token to cookie.
 const serialize = (name: string, value: string, options: Record<string, any>): string => {
@@ -64,10 +66,10 @@ export const authRouter = createTRPCRouter({
          email: z.string(),
          password: z.string().optional(),
       }))
-      .query(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }) => {
          const { email, password } = input
          if (password) {
-            const candidate = await bcrypt.hash(password, 10)
+            // const candidate = await bcrypt.hash(password, 10)
             const account = await ctx.prisma.account.findUnique({
                where: {
                   email
@@ -76,22 +78,44 @@ export const authRouter = createTRPCRouter({
             if (!account) {
                throw new TRPCError({
                   code: "UNAUTHORIZED",
-                  message: "Invalid email or password.",
+                  message: "Invalid email.",
+                  // message: "Invalid email or password.",
                });
             }
-            const isPasswordValid = await bcrypt.compare(candidate, account.hash);
+            // const isPasswordValid = await bcrypt.compare(candidate, account.hash);
+            const isPasswordValid = password === account.hash;
             if (!isPasswordValid) {
                throw new TRPCError({
                  code: "UNAUTHORIZED",
-                 message: "Invalid email or password.",
+                 message: "Invalid password.",
                });
             }
-            // the account is good, figure out how to set cookie + redirect
 
-            return "token"
+            // From here the account is good.
+
+            // Generate the token.
+            const serverJwtSecret = env.JSONWEBTOKEN_SECRET
+            const token = generateToken(account.id.toString(), serverJwtSecret);
+
+            // Set the token as a cookie
+            const cookie = serialize('token', token, {
+               httpOnly: true,
+               secure: true,
+               sameSite: 'lax',
+               maxAge: 3600,
+               path: '/',
+            });
+            ctx.res.setHeader('Set-Cookie', cookie);
+
+            // Redirect response to URL '/'
+            ctx.res.setHeader('Location', '/');
+            // Set the appropriate status code for redirection
+            ctx.res.statusCode = 302;
+
+            return { accessToken: token }
          } else {
             // Send verification email.
-            return ""
+            return { accessToken: ""}
          }
       }),
    /** Gives you a valid session cookie. */

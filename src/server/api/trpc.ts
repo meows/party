@@ -126,6 +126,7 @@ export const publicProcedure = t.procedure
 
 const enforceAuth = t.middleware(async ({ ctx, next }) => {
    const account = ctx.req.cookies.account ?? ""
+   // split(' ')[1] bc authorization token is in format "Bearer vneasdicjadl"
    // const token = ctx.req.headers.authorization?.split(' ')[1]
    const token = ctx.req.cookies.token ?? ""
    if (!account || !token) throw new TRPCError({ code: "UNAUTHORIZED" })

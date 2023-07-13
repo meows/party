@@ -42,7 +42,11 @@ const CreateEventPage = () => {
       longitude: 0,
       latitude: 0,
    })
-   const query = api.party.makeParty.useMutation()
+   const { mutate: makeAParty, isLoading } = api.party.makeParty.useMutation({
+        onSuccess: ({  }) => {
+            console.log("successfully created a party page url")
+        }
+    })
 
    function getHostName(): string | number | readonly string[] | undefined {
       // TODO: If signed in, do not allow user to change this field,
@@ -52,7 +56,8 @@ const CreateEventPage = () => {
 
    function isLoggedIn(): boolean | undefined {
       // TODO: return if logged in.
-      return false
+      //   return false
+      return true
    }
 
    return (
@@ -62,37 +67,41 @@ const CreateEventPage = () => {
             <div className="flex items-center justify-between">
                <h1 className="fond-semibold text-xl">Create a Party Page</h1>
             </div>
+
             <hr className="h-px bg-zinc-500" />
+
             <div>
                <p className="text-lg font-medium">Name</p>
                <p className="pb-2 text-xs">
                   Party Names cannot be changed later.
                </p>
-            </div>
-            <div className="relative">
-               <Input
-                  className="p1-6" //onClick={() => router.back()}
-                  value={URL_PARTY + formData.name}
-                  onChange={(e) =>
-                     setFormData((prev) => ({
-                        ...prev,
-                        name: e.target.value.replace(URL_PARTY, ""),
-                     }))
-                  }
-               />
+               <div className="relative">
+                  <p className="absolute inset-y-0 left-0 grid w-8 place-items-center text-sm text-zinc-400">
+                     {URL_PARTY}
+                  </p>
+                  <Input
+                     className="p1-6" //onClick={() => router.back()}
+                     value={formData.name}
+                     onChange={(e) =>
+                        setFormData((prev) => ({
+                           ...prev,
+                           //    name: e.target.value.replace(URL_PARTY, ""),
+                           name: e.target.value,
+                        }))
+                     }
+                  />
+               </div>
             </div>
 
             <div className="relative">
-               <p className="absolute left-0 text-small font-medium grid place-items-center text-zinc-400">
-                Hosted by
-                </p>
+               <p className="text-small absolute left-0 grid place-items-center font-medium text-zinc-400">
+                  Hosted by
+               </p>
                <Input
-                  value={getHostName() ?? hostName}
+                  value={getHostName() || hostName}
                   placeholder="Your Hosting Name"
-                  disabled={isLoggedIn()}
-                  onChange={(e) => {
-                     setHostName(e.target.value)
-                  }}
+                  disabled={!isLoggedIn()}
+                  onChange={(e) => setHostName(e.target.value)}
                />
             </div>
             <div className="flex justify-end gap-4">
@@ -102,10 +111,10 @@ const CreateEventPage = () => {
                      // TODO: if signed out send the hostName value
                      //       to the backend, and use it once user
                      //       verifies their email aka creates an account.
-                     query.mutate(formData)
+                     makeAParty(formData)
                   }}
                >
-                  {query.isLoading ? "Submitting..." : "Publish"}
+                  {isLoading ? "Submitting..." : "Publish"}
                </Button>
             </div>
          </div>

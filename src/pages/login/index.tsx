@@ -1,23 +1,53 @@
-import { Button } from "shadcn/components/ui/Button";
-import { Input } from "shadcn/components/ui/Input";
+import { useState } from "react"
+import { Button } from "shadcn/components/ui/Button"
+import { Input } from "shadcn/components/ui/Input"
 import { api, setToken } from "~/utils/api"
 
 export default function Login() {
-   const {  } = api.auth.loginWithEmail.useQuery()
-      // {
-      // onSuccess: ({ accessToken }) => {
-      //     setToken(accessToken)
-      // }
-      // }
-      // )
-   return <section>
-      <h1>Login</h1>
-      <Input type="email" placeholder="email" />
-      <Input type="password" placeholder="password" />
-      <Button>Submit</Button>
-   </section>
-}
+   const [emailOrPhone, setEmailOrPhone] = useState("")
+   const [password, setPassword] = useState("")
 
+   // const query = api.auth.loginWithEmail.useQuery({
+   //    email: emailOrPhone,
+   //    password: password
+   // })
+
+   const { mutate: loginWithEmail, isLoading } =
+      api.auth.loginWithEmail.useMutation({
+         // accessToken is what we return from the loginWithEmail mutate function.
+         onSuccess: ({ accessToken }) => {
+            console.log(accessToken)
+            setToken(accessToken)
+         },
+      })
+
+   const handelSubmit = async (e: React.SyntheticEvent) => {
+      e.preventDefault()
+      const token = loginWithEmail({ email: emailOrPhone, password: password })
+   }
+
+   return (
+      <section>
+         <h1>Login</h1>
+         <form onSubmit={handelSubmit}>
+            <Input
+               name="login-form"
+               type="email"
+               placeholder="email"
+               onChange={(e) => setEmailOrPhone(e.target.value)}
+            />
+            <Input
+               type="password"
+               placeholder="password"
+               onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button disabled={emailOrPhone.length == 0 || isLoading}>
+               Submit
+            </Button>
+         </form>
+      </section>
+   )
+}
 
 // import { z } from 'zod';
 // import { trpc } from 'path/to/your/trpc'; // Import your trpc instance
