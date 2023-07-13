@@ -1,16 +1,26 @@
+import { Button } from "shadcn/components/ui/Button";
+import { Input } from "shadcn/components/ui/Input";
+import { api, setToken } from "~/utils/api"
+
 export default function Login() {
+   const {  } = api.auth.loginWithEmail.useQuery()
+      // {
+      // onSuccess: ({ accessToken }) => {
+      //     setToken(accessToken)
+      // }
+      // }
+      // )
    return <section>
       <h1>Login</h1>
-      <input type="email" placeholder="email" />
-      <input type="password" placeholder="password" />
-      <button>Submit</button>
+      <Input type="email" placeholder="email" />
+      <Input type="password" placeholder="password" />
+      <Button>Submit</Button>
    </section>
 }
 
 
 // import { z } from 'zod';
 // import { trpc } from 'path/to/your/trpc'; // Import your trpc instance
-// import { api } from "~/utils/api"
 
 // import { useState } from 'react';
 // const loginOrSignUp = api.auth.

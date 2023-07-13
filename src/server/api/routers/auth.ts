@@ -2,6 +2,44 @@ import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc"
 import { z } from "zod"
 import bcrypt from "bcrypt"
+import jwt from 'jsonwebtoken'
+
+// Function to generate a JWT token
+const generateToken = (userId: string): string => {
+  const token = jwt.sign({ userId }, 'your-secret-key', {
+    expiresIn: '1h', // Token expiration time
+  });
+
+  return token;
+};
+
+// Usage example
+const token = generateToken('user123');
+console.log(token);
+
+// Serialize function to convert token to cookie.
+const serialize = (name: string, value: string, options: Record<string, any>): string => {
+   const cookieParts = [`${name}=${encodeURIComponent(value)}`];
+ 
+   for (const [key, val] of Object.entries(options)) {
+     if (val !== false) {
+       cookieParts.push(`${key}=${val}`);
+     }
+   }
+ 
+   return cookieParts.join('; ');
+ };
+
+// Usage example
+/*
+const cookie = serialize('token', 'your-token-value', {
+   httpOnly: true,
+   secure: true,
+   sameSite: 'lax',
+   maxAge: 3600,
+   path: '/',
+ });
+ */
 
 export const authRouter = createTRPCRouter({
    isAuth: protectedProcedure
@@ -49,9 +87,11 @@ export const authRouter = createTRPCRouter({
                });
             }
             // the account is good, figure out how to set cookie + redirect
-            return
+
+            return "token"
          } else {
             // Send verification email.
+            return ""
          }
       }),
    /** Gives you a valid session cookie. */
