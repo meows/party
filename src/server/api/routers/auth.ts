@@ -43,6 +43,14 @@ const cookie = serialize('token', 'your-token-value', {
  });
  */
 
+ const calculateExpiryDate = (): Date => {
+   const currentDate = new Date();
+   const expiryDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
+   // return new prisma.DateTime(expiryDate.toISOString());
+   console.log(expiryDate.toISOString)
+   return expiryDate;
+ };
+
 export const authRouter = createTRPCRouter({
    isAuth: protectedProcedure
       .query(async ({ ctx }) => {
@@ -67,6 +75,18 @@ export const authRouter = createTRPCRouter({
          password: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+         const createSession = async (token: string, ownerId: number) => {
+            const session = await ctx.prisma.session.create({
+              data: {
+                token,
+                session_owner: ownerId,
+                // Calculate the expiry date based on your requirements
+                expiry: calculateExpiryDate(),
+              },
+            });
+            return session;
+          };
+         
          const { email, password } = input
          const account = await ctx.prisma.account.findFirst({
             where: {
@@ -77,6 +97,7 @@ export const authRouter = createTRPCRouter({
              },
          })
          if (!account) {
+            // Means the user wants to sign up with email or phone
             throw new TRPCError({
                code: "UNAUTHORIZED",
                message: "Invalid email.",
@@ -108,6 +129,9 @@ export const authRouter = createTRPCRouter({
                path: '/',
             });
             ctx.res.setHeader('Set-Cookie', cookie);
+
+            // Store the cookie in our DB sessions table
+            const session = await createSession(token, account.id);
 
             // Redirect response to URL '/'
             ctx.res.setHeader('Location', '/');
