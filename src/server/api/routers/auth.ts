@@ -56,9 +56,8 @@ export const authRouter = createTRPCRouter({
     *    - Unknown user will receive a registration link.
     *
     * If password is present:
-    *   - Known user will receive a login link.
+    *   - Known user will have password checked & error if wrong.
     *   - Unknown user will receive a registration link.
-    *   - If the password is incorrect, the user will receive an error.
     */
    loginOrRegister: publicProcedure
       .input(z.object({
