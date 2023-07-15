@@ -62,25 +62,26 @@ export const authRouter = createTRPCRouter({
    loginOrRegister: publicProcedure
       .input(z.object({
          email: z.string(),
-         password: z.string().optional(),
+         password: z.string(), // require password for now before we get email
       }))
       .query(async ({ ctx, input: { email, password } }) => {
-         const is_known_email = await ctx.prisma.account.findFirst({ where: { email } })
-         if (!password) {
-            if (is_known_email) {
-               // Send login link
-            }
-            else {
-               // Send registration link
-            }
-         }
-         else {
-            const is_valid_password = await ctx.prisma.account.findFirst({
-               where: {
+         // INSERT INTO [Account] (email, hash)
+         // VALUES (v1, v2)
+         // ON CONFLICT (email) DO NOTHING
+         // RETURNING *;
+
+         const account = await ctx.prisma.account
+            .upsert({
+               where: { email },
+               create: {
                   email,
-                  hash: password, // fix for bcrypt hash
+                  hash: password,
+               },
+               update: {
+                  email,
+                  hash: password,
                },
             })
-         }
+            
       }),
 })
