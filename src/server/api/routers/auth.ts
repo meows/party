@@ -19,7 +19,6 @@ export const authRouter = createTRPCRouter({
             })
          return result
       }),
-
    giveCookie: publicProcedure
       .query(async ({ ctx }) => {
          ctx.res.setHeader("Set-Cookie", "token=hello;")
@@ -48,6 +47,40 @@ export const authRouter = createTRPCRouter({
             throw new TRPCError({
                code: "CONFLICT",
                message: "User already exists",
+            })
+         }
+      }),
+   /**
+    * If no password is present:
+    *    - Known user will receive a login link.
+    *    - Unknown user will receive a registration link.
+    *
+    * If password is present:
+    *   - Known user will receive a login link.
+    *   - Unknown user will receive a registration link.
+    *   - If the password is incorrect, the user will receive an error.
+    */
+   loginOrRegister: publicProcedure
+      .input(z.object({
+         email: z.string(),
+         password: z.string().optional(),
+      }))
+      .query(async ({ ctx, input: { email, password } }) => {
+         const is_known_email = await ctx.prisma.account.findFirst({ where: { email } })
+         if (!password) {
+            if (is_known_email) {
+               // Send login link
+            }
+            else {
+               // Send registration link
+            }
+         }
+         else {
+            const is_valid_password = await ctx.prisma.account.findFirst({
+               where: {
+                  email,
+                  hash: password, // fix for bcrypt hash
+               },
             })
          }
       }),
