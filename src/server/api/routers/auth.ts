@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc"
 
 export const authRouter = createTRPCRouter({
    isAuth: protectedProcedure
@@ -18,4 +18,9 @@ export const authRouter = createTRPCRouter({
             })
          return result
       }),
+
+   giveCookie: publicProcedure
+      .query(async ({ ctx }) => {
+         ctx.res.setHeader("Set-Cookie", "token=hello;")
+      })
 })
