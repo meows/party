@@ -69,10 +69,14 @@ export const authRouter = createTRPCRouter({
          // VALUES (v1, v2)
          // ON CONFLICT (email) DO NOTHING
          // RETURNING *;
-         const result = await ctx.prisma.account.upsert({
-            where: { email },
-            create: { email, hash: password, name: "John Bob" },
-            update: {},
-         })
+         const result = await ctx.prisma.account
+            .upsert({
+               where: { email },
+               create: { email, hash: password, name: "John Bob" },
+               update: {},
+            })
+            .catch(message => {
+               throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+            })
       }),
 })
