@@ -22,5 +22,6 @@ export const authRouter = createTRPCRouter({
    giveCookie: publicProcedure
       .query(async ({ ctx }) => {
          ctx.res.setHeader("Set-Cookie", "token=hello;")
+         return { message: "Cookie set" }
       })
 })
