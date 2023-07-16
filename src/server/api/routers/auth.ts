@@ -65,15 +65,85 @@ export const authRouter = createTRPCRouter({
          password: z.string(), // require password for now before we get email
       }))
       .query(async ({ ctx, input: { email, password } }) => {
-         const result = await ctx.prisma.account
-            .upsert({
-               where: { email },
-               create: { email, hash: password, name: "John Bob" },
-               update: {},
-            })
+         const hash = await ctx.bcrypt.hash(password, 10)
+         const user_exists = await ctx.prisma.account
+            .findFirst({ where: { email } })
             .catch(message => {
                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
             })
-         
-      }),
+
+         if (user_exists && hash === user_exists.hash) throw new TRPCError({
+            code: "UNAUTHORIZED", message: "Incorrect password"
+         })
+         else {
+            await ctx.prisma.account
+               .create({
+                  data: {
+                     email,
+                     hash,
+                     name: "John Bob",
+                  }
+               })
+               .catch(message => {
+                  throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+               })
+         }
+         }),
+
+
 })
+
+// with
+//     new_rows(name, password) as (values
+//         ('alex', 'wwwwww'),
+//         ('potato', 'potatopw'),
+//         ('bee', 'bah')
+//     ),
+//     existing_user_lookup as (
+//         select
+//             users.name,
+//             users.password as old_pw,
+//             new_rows.password as new_pw
+//         from
+//             new_rows join users on new_rows.name = users.name
+//     ),
+//     same_name_wrong_pw as (
+//         select
+//             name,
+//             'wrong password' as status
+//         from
+//             existing_user_lookup
+//         where
+//             old_pw <> new_pw
+//     ),
+//     same_name_same_pw as (
+//         select
+//             name,
+//             'correct password' as status
+//         from
+//             existing_user_lookup
+//         where
+//             old_pw = new_pw
+//     ),
+//     actually_inserted as (
+//         insert into users
+//             select * from new_rows where name not in (select name from existing_user_lookup)
+//         returning
+//             name,
+//             'created' as status
+//     )
+// select * from same_name_wrong_pw
+// union all
+// select * from same_name_same_pw
+// union all
+// select * from actually_inserted;
+
+// const result = await ctx.prisma.account
+//    .upsert({
+//       where: { email },
+//       create: { email, hash: password, name: "John Bob" },
+//       update: {},
+//    })
+//    .catch(message => {
+//       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+//    })
