@@ -65,10 +65,6 @@ export const authRouter = createTRPCRouter({
          password: z.string(), // require password for now before we get email
       }))
       .query(async ({ ctx, input: { email, password } }) => {
-         // INSERT INTO [Account] (email, hash)
-         // VALUES (v1, v2)
-         // ON CONFLICT (email) DO NOTHING
-         // RETURNING *;
          const result = await ctx.prisma.account
             .upsert({
                where: { email },
