@@ -64,17 +64,18 @@ export const authRouter = createTRPCRouter({
          email: z.string(),
          password: z.string(), // require password for now before we get email
       }))
-      .query(async ({ ctx, input: { email, password } }) => {
+      .mutation(async ({ ctx, input: { email, password } }) => {
          const hash = await ctx.bcrypt.hash(password, 10)
          const result = await ctx.prisma.account
             .upsert({
                where: { email },
-               create: { email, hash: password, name: "John Bob" },
+               create: { email, hash: password, name: "John Bob", id: 10 },
                update: {},
             })
             .catch(message => {
                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
             })
+
          return result
       }),
 })

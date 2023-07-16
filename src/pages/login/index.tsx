@@ -6,7 +6,7 @@ export default function Login() {
    const [pass, setPass] = useState("")
 
    const handleSubmit = async () => {
-      const res = await client.auth.loginOrRegister.query({
+      const res = await client.auth.loginOrRegister.mutate({
          email,
          password: pass
       })
