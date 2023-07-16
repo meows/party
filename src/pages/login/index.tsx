@@ -6,29 +6,37 @@ export default function Login() {
    const [pass, setPass] = useState("")
 
    async function onSubmit() {
-      const client = api.useContext()
+      const client = api.auth.loginOrRegister.useQuery({
+         email,
+         password: pass
+      })
    }
 
-   useEffect(() =>{
-      
-   })
-
    return (
-      <section>
-         <h1>Login</h1>
-         <input
-            type="text"
-            placeholder="email"
-            onChange={e => setEmail(e.target.value)}
-            value={email}
-         />
-         <input
-            type="password"
-            placeholder="password"
-            onChange={e => setPass(e.target.value)}
-            value={pass}
-         />
-         <button onClick={onSubmit}>Submit</button>
+      <section className="flex flex-col items-center justify-center h-screen">
+         <div className="flex flex-col items-center justify-center w-96">
+            <h1 className="text-4xl font-bold mb-1">Login or Register</h1>
+            <input
+               className="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md"
+               type="email"
+               placeholder="Email"
+               value={email}
+               onChange={e => setEmail(e.target.value)}
+            />
+            <input
+               className="w-full px-4 py-2 mt-4 border border-gray-300 rounded-md"
+               type="password"
+               placeholder="Password"
+               value={pass}
+               onChange={e => setPass(e.target.value)}
+            />
+            <button
+               className="w-full px-4 py-2 mt-4 text-white bg-blue-500 rounded-md"
+               onClick={onSubmit}
+            >
+               Submit
+            </button>
+         </div>
       </section>
    )
 }
