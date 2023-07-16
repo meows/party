@@ -32,14 +32,12 @@ model party {
   host         Int
   chat_id      String?
   created      DateTime     @default(now()) @db.Timestamp(6)
+  updated      DateTime     @default(now()) @db.Timestamp(6)
   time_start   DateTime     @db.Timestamp(6)
   time_end     DateTime?    @db.Timestamp(6)
   is_waitlist  Boolean      @default(false)
   party_size   Int?
   price        Int          @default(0)
-  is_private   Boolean      @default(false)
-  is_deleted   Boolean      @default(false)
-  is_published Boolean      @default(false)
   widgets      Json?
   state        String
   city         String
@@ -48,6 +46,9 @@ model party {
   unit         String?
   longitude    Float        @db.Real
   latitude     Float        @db.Real
+  is_private   Boolean      @default(false)
+  is_deleted   Boolean      @default(false)
+  is_published Boolean      @default(false)
   attendance   attendance[]
   account      account      @relation(fields: [host], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

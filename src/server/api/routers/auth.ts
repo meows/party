@@ -74,5 +74,6 @@ export const authRouter = createTRPCRouter({
             .catch(message => {
                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
             })
+         
       }),
 })
