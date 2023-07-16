@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react"
-import { api } from "~/utils/api"
+import { useState } from "react"
+import { api, client } from "~/utils/api"
 
 export default function Login() {
    const [email, setEmail] = useState("")
    const [pass, setPass] = useState("")
 
-   async function onSubmit() {
-      const client = api.auth.loginOrRegister.useQuery({
+   const handleSubmit = async () => {
+      const res = await client.auth.loginOrRegister.query({
          email,
          password: pass
       })
+      console.log(res)
    }
 
    return (
@@ -32,7 +33,7 @@ export default function Login() {
             />
             <button
                className="w-full px-4 py-2 mt-4 text-white bg-blue-500 rounded-md"
-               onClick={onSubmit}
+               onClick={handleSubmit}
             >
                Submit
             </button>

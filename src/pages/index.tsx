@@ -105,7 +105,7 @@ export const colourOptions: readonly ColourOption[] = [
 // Component
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ name: "from tRPC" });
   const [ignoreCase] = useState(true);
   const [ignoreAccents] = useState(true);
   const [trim] = useState(false);
