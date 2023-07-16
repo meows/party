@@ -66,28 +66,15 @@ export const authRouter = createTRPCRouter({
       }))
       .query(async ({ ctx, input: { email, password } }) => {
          const hash = await ctx.bcrypt.hash(password, 10)
-         const user_exists = await ctx.prisma.account
-            .findFirst({ where: { email } })
+         const result = await ctx.prisma.account
+            .upsert({
+               where: { email },
+               create: { email, hash: password, name: "John Bob" },
+               update: {},
+            })
             .catch(message => {
                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
             })
-
-         if (user_exists && hash === user_exists.hash) throw new TRPCError({
-            code: "UNAUTHORIZED", message: "Incorrect password"
-         })
-         else {
-            await ctx.prisma.account
-               .create({
-                  data: {
-                     email,
-                     hash,
-                     name: "John Bob",
-                  }
-               })
-               .catch(message => {
-                  throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
-               })
-         }
          }),
 
 
