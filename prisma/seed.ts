@@ -105,6 +105,7 @@ async function main() {
       db.party.createMany({ data: parties }),
       db.attendance.createMany({ data: attendance }),
       db.session.createMany({ data: sessions }),
+      db.$executeRaw`ALTER SEQUENCE "account_id_seq" RESTART WITH 6;`,
    ]).catch(err => console.log("Seed error: ", err))
 }
 

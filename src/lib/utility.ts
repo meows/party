@@ -46,6 +46,14 @@ type address_components_types =
 
 /** Start of unix epoch. */
 export const epoch = "Thu, 01 Jan 1970 00:00:00 GMT"
+/** Prescribed length of random identifier. */
+export const token_length = 32
+/** For JS Date */
+export const minute = 60 * 1000
+/** For JS Date */
+export const hour = 60 * minute
+/** For JS Date */
+export const day = 24 * hour
 
 // —————————————————————————————————————————————————————————————————————————————
 // Utilities
@@ -78,8 +86,8 @@ export function getCookies(cookies:string|null): Record<string, string> {
       ? cookies.split("; ")
          .map(cookie => {
             let [, k, v] = regex.exec(cookie) ?? []
-            if (v[0] === '"') v = v.slice(1, -1)
-            return [decodeURIComponent(k), decodeURIComponent(v?.trim() ?? "")]
+            if (v![0] === '"') v = v?.slice(1, -1)
+            return [decodeURIComponent(k!), decodeURIComponent(v?.trim() ?? "")]
          })
          .filter(kv => kv[0])
       : []

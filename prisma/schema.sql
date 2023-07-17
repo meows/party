@@ -18,7 +18,7 @@ CREATE DOMAIN   Link    VARCHAR(255);
 -- Account
 
 CREATE TABLE Account (
-   id          SERIAL,
+   id          SERIAL      NOT NULL,
    name        TEXT        NOT NULL,
    email       Email       UNIQUE NOT NULL,
    phone       Phone       UNIQUE,
@@ -73,14 +73,12 @@ CREATE TABLE Party (
    host           INT         NOT NULL,
    chat_id        TEXT        DEFAULT NULL,
    created        TIMESTAMP   DEFAULT NOW() NOT NULL,
+   updated        TIMESTAMP   DEFAULT NOW() NOT NULL,
    time_start     TIMESTAMP   NOT NULL,
    time_end       TIMESTAMP   DEFAULT NULL,
    is_waitlist    BOOLEAN     DEFAULT FALSE NOT NULL,
    party_size     INT         DEFAULT NULL, -- null means infinite
    price          INT         DEFAULT 0     NOT NULL,
-   is_private     BOOLEAN     DEFAULT FALSE NOT NULL,
-   is_deleted     BOOLEAN     DEFAULT FALSE NOT NULL,
-   is_published   BOOLEAN     DEFAULT FALSE NOT NULL,
    widgets        JSONB       DEFAULT NULL,
    state          TEXT        NOT NULL,
    city           TEXT        NOT NULL,
@@ -89,6 +87,9 @@ CREATE TABLE Party (
    unit           TEXT        DEFAULT NULL,
    longitude      REAL        NOT NULL,
    latitude       REAL        NOT NULL,
+   is_private     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_deleted     BOOLEAN     DEFAULT FALSE NOT NULL,
+   is_published   BOOLEAN     DEFAULT FALSE NOT NULL,
 
    PRIMARY KEY (id),
    FOREIGN KEY (host) REFERENCES Account(id)

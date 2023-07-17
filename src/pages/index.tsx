@@ -1,14 +1,14 @@
-import { type NextPage } from "next";
-import React, { useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import Button from "~/components/Button";
-import Input from "~/components/Input";
-import { api } from "~/utils/api";
-import TopMenu from "~/components/TopMenu";
-import Select, { createFilter } from "react-select";
-import { DropDownButton, DropDownItem } from "~/components/DropDownButton";
-import Feed from "~/components/Feed";
+import { type NextPage } from "next"
+import React, { useState } from "react"
+import Select, { createFilter } from "react-select"
+import { api } from "~/utils/api"
+
+import Head from "next/head"
+import { DropDownButton, DropDownItem } from "@/DropDownButton"
+import TopMenu from "@/TopMenu"
+import Button from "@/Button"
+import Input from "@/Input"
+import Feed from "@/Feed"
 
 // —————————————————————————————————————————————————————————————————————————————
 // Environment
@@ -105,7 +105,7 @@ export const colourOptions: readonly ColourOption[] = [
 // Component
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ name: "from tRPC" });
   const [ignoreCase] = useState(true);
   const [ignoreAccents] = useState(true);
   const [trim] = useState(false);
@@ -116,7 +116,7 @@ const Home: NextPage = () => {
     ignoreAccents,
     trim,
     matchFrom: matchFromStart ? ("start" as const) : ("any" as const),
-  };
+  }
   return (
     <>
       <Head>
@@ -175,34 +175,7 @@ const Home: NextPage = () => {
         </div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
-
-
-
+export default Home

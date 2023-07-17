@@ -22,13 +22,13 @@ export function getCookies(cookies: string | null): Record<string, string> {
          .split("; ")
          .map((cookie) => {
             let [, key, value] = regex.exec(cookie) ?? []
-            if (value[0] === '"') value = value.slice(1, -1)
+            if (value![0] === '"') value = value!.slice(1, -1)
             return [
-               decodeURIComponent(key),
+               decodeURIComponent(key!),
                decodeURIComponent(value?.trim() ?? ""),
             ]
          })
-         .filter(([key, _]) => key)
+         .filter(([key]) => key)
       : []
 
    return Object.fromEntries(pairs)
