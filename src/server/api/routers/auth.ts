@@ -33,6 +33,7 @@ export const authRouter = createTRPCRouter({
    loginOrRegister: publicProcedure
       .input(z.object({ email: z.string(), password: z.string() }))
       .mutation(async ({ ctx, input: { email, password } }) => {
+         // retrieve existing user || create new user
          const hash = await ctx.bcrypt.hash(password, 10)
          const now = new Date()
          const result = await ctx.prisma.account
@@ -57,6 +58,7 @@ export const authRouter = createTRPCRouter({
 
          if (result.created.getTime() === now.getTime()) console.log("New account: ", result)
 
+         // generate session
          const token = randomString(32)
          const session = await ctx.prisma.session
             .create({
