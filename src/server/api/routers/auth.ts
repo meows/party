@@ -81,7 +81,11 @@ export const authRouter = createTRPCRouter({
                update: {},
             })
             .catch(message => {
-               throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+               throw new TRPCError({
+                  code: "INTERNAL_SERVER_ERROR",
+                  message,
+                  cause: "Failure to create or retrieve account."
+               })
             })
 
          if (result.created.getTime() === now.getTime()) console.log("New account: ", result)
@@ -96,7 +100,11 @@ export const authRouter = createTRPCRouter({
                },
             })
             .catch(message => {
-               throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+               throw new TRPCError({
+                  code: "INTERNAL_SERVER_ERROR",
+                  message,
+                  cause: "Failure to create session."
+               })
             })
             ctx.res.setHeader("Set-Cookie", `token=${token};`)
             return session
@@ -147,13 +155,3 @@ export const authRouter = createTRPCRouter({
 // select * from same_name_same_pw
 // union all
 // select * from actually_inserted;
-
-// const result = await ctx.prisma.account
-//    .upsert({
-//       where: { email },
-//       create: { email, hash: password, name: "John Bob" },
-//       update: {},
-//    })
-//    .catch(message => {
-//       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
-//    })
