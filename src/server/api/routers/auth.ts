@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { randomString } from "~/lib/utility"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc"
+import { hour, randomString } from "~/lib/utility"
 
 export const authRouter = createTRPCRouter({
    /** Check if you have good auth cookies. */
@@ -62,7 +62,7 @@ export const authRouter = createTRPCRouter({
             .create({
                data: {
                   token,
-                  expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                  expiry: new Date(Date.now() + hour),
                   session_owner: result.id,
                },
             })
