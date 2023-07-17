@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
+import { randomString } from "~/lib/utility"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc"
 
 export const authRouter = createTRPCRouter({
@@ -66,17 +67,39 @@ export const authRouter = createTRPCRouter({
       }))
       .mutation(async ({ ctx, input: { email, password } }) => {
          const hash = await ctx.bcrypt.hash(password, 10)
+         const now = new Date()
          const result = await ctx.prisma.account
             .upsert({
                where: { email },
-               create: { email, hash: password, name: "John Bob", id: 10 },
+               create: {
+                  email,
+                  hash,
+                  name: "John Bob",
+                  created: now,
+                  updated: now,
+               },
                update: {},
             })
             .catch(message => {
                throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
             })
 
-         return result
+         if (result.created.getTime() === now.getTime()) console.log("New account: ", result)
+
+         const token = randomString(32)
+         const session = await ctx.prisma.session
+            .create({
+               data: {
+                  token,
+                  expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                  session_owner: result.id,
+               },
+            })
+            .catch(message => {
+               throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message })
+            })
+            ctx.res.setHeader("Set-Cookie", `token=${token};`)
+            return session
       }),
 })
 

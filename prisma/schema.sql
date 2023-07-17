@@ -18,7 +18,7 @@ CREATE DOMAIN   Link    VARCHAR(255);
 -- Account
 
 CREATE TABLE Account (
-   id          SERIAL,
+   id          SERIAL      NOT NULL,
    name        TEXT        NOT NULL,
    email       Email       UNIQUE NOT NULL,
    phone       Phone       UNIQUE,
