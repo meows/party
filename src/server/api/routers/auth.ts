@@ -74,7 +74,6 @@ export const authRouter = createTRPCRouter({
                })
             })
             ctx.res.setHeader("Set-Cookie", `token=${token};`)
-            ctx.res.setHeader("Set-Cookie", `account=${result.id};`)
             return session
       }),
 })
