@@ -41,9 +41,9 @@ export const authRouter = createTRPCRouter({
                create: {
                   email,
                   hash,
-                  name: "John Bob",
                   created: now,
                   updated: now,
+                  name: "John Bob",
                },
                update: {},
             })
