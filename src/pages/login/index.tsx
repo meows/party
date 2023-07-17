@@ -10,7 +10,7 @@ export default function Login() {
          email,
          password: pass
       })
-      console.log(res)
+      console.log("Auth Message: ", res)
    }
 
    return (
