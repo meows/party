@@ -31,10 +31,7 @@ export const authRouter = createTRPCRouter({
     *   - Unknown user will receive a registration link.
     */
    loginOrRegister: publicProcedure
-      .input(z.object({
-         email: z.string(),
-         password: z.string(), // require password for now before we get email
-      }))
+      .input(z.object({ email: z.string(), password: z.string() }))
       .mutation(async ({ ctx, input: { email, password } }) => {
          const hash = await ctx.bcrypt.hash(password, 10)
          const now = new Date()
