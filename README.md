@@ -1,7 +1,8 @@
 # Requirements
 
 - [PostgreSQL 15](https://postgresapp.com/downloads.html)
-- Download the `.env` file from the discord server and save to project root.
+- Download the `.env` file from the discord server and save to project root. The
+  file should have the `DATABASE_URL` variable set to the local postgresql.
 
 # Installation
 
@@ -22,7 +23,7 @@
    npx prisma db push
    ```
 
-   Run the DB seed script `seed.ts` for initial data. The script is idempotent 
+   Run the DB seed script `seed.ts` for initial data. The script is idempotent
    so you can run it again to reset the DB data.
    ```
    npx prisma db seed
@@ -38,11 +39,11 @@
    ```
 
    > Next.js will launch a dev server accessible over your local network. You
-   > can access the dev server from another device on the same local network at 
-   > `hostname.local:3000`. Get your hostname by typing `hostname` into the 
+   > can access the dev server from another device on the same local network at
+   > `hostname.local:3000`. Get your hostname by typing `hostname` into the
    > terminal.
 
-2. Launch a db explorer. This command also confirms that prisma is working. This 
+2. Launch a db explorer. This command also confirms that prisma is working. This
    command should open a brower window at `localhost:5555`.
    ```
    npx prisma studio

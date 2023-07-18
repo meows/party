@@ -17,7 +17,7 @@ type DropDownButtonProps<T> = React.PropsWithChildren<{
 }>;
 
 type DropDownItemProps = React.PropsWithChildren<{
-  setSelected: (value: string) => void;
+  setSelected?: (value: string) => void;
 }>;
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -32,9 +32,7 @@ const DropDownItem: React.FC<DropDownItemProps> = ({
     <Menu.Item {...props}>
       {({ active }) => (
         <button
-          onClick={() => {
-            setSelected(children!.valueOf() as string);
-          }}
+          onClick={() => { setSelected!(children!.valueOf() as string); }}
           className={classNames(
             active ? "bg-gray-100 text-gray-900" : "text-gray-700",
             "block w-full whitespace-nowrap px-4 py-2 text-left text-sm"
