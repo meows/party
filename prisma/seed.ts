@@ -105,7 +105,10 @@ async function main() {
       db.party.createMany({ data: parties }),
       db.attendance.createMany({ data: attendance }),
       db.session.createMany({ data: sessions }),
-      db.$executeRaw`ALTER SEQUENCE "account_id_seq" RESTART WITH 6;`,
+      db.$executeRaw`ALTER SEQUENCE "account_id_seq" RESTART WITH last_value();`,
+      db.$executeRaw`ALTER SEQUENCE "party_id_seq" RESTART WITH last_value();`,
+      db.$executeRaw`ALTER SEQUENCE "attendance_id_seq" RESTART WITH last_value();`,
+      db.$executeRaw`ALTER SEQUENCE "session_id_seq" RESTART WITH last_value();`,
    ]).catch(err => console.log("Seed error: ", err))
 }
 
