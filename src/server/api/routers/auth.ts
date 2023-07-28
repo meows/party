@@ -76,4 +76,22 @@ export const authRouter = createTRPCRouter({
             ctx.res.setHeader("Set-Cookie", `token=${token};`)
             return session
       }),
+   changePassword: protectedProcedure
+      .input(z.object({ password: z.string() }))
+      .mutation(async ({ ctx, input: { password } }) => {
+         const hash = await ctx.bcrypt.hash(password, 10)
+         const result = await ctx.prisma.account
+            .update({
+               where: { id: Number(ctx.session.account) },
+               data: { hash },
+            })
+            .catch(message => {
+               throw new TRPCError({
+                  code: "INTERNAL_SERVER_ERROR",
+                  message,
+                  cause: "Failure to update password."
+               })
+            })
+         return result
+      }),
 })
