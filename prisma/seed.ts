@@ -7,10 +7,11 @@ const db = new PrismaClient()
 const accounts = [
    {
       id: 1,
-      name: "Meow",
+      name: "meow",
       email: "meow@meow.com",
       phone: "12345678",
-      hash: "example_hash",
+      // hashed password "meow"
+      hash: "$2a$12$bHg/IPb27c88m.d7GKiw8uIe9wL5r82MbECNeifyda40l21YTJdOe",
       about: "hi",
    },
    {
